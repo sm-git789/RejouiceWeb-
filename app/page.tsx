@@ -33,7 +33,7 @@ const Home: React.FC = () =>{
       <LogoScroll/>
       <ProjectShowcase/>
       <OurApproach/>
-       <PORTFOLIO/> 
+       <PORTFOLIO/>
        <About/>
        <Footer/>
       

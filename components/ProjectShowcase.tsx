@@ -43,10 +43,14 @@ function RotatingLogos({ logos }: { logos: string[] }) {
   );
 }
 
+
 function LiveClock() {
-  const [now, setNow] = useState(new Date());
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
+    // Set the current time after the component mounts
+    setNow(new Date());
+
     const interval = window.setInterval(() => {
       setNow(new Date());
     }, 1000);
@@ -55,17 +59,19 @@ function LiveClock() {
   }, []);
 
   const getTime = (timezone: string) =>
-    new Intl.DateTimeFormat("en-US", {
-      timeZone: timezone,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    }).format(now);
+    now
+      ? new Intl.DateTimeFormat("en-US", {
+          timeZone: timezone,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        }).format(now)
+      : "--:--:--";
 
-  const hours = now.getHours() % 12;
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
+  const hours = now ? now.getHours() % 12 : 0;
+  const minutes = now ? now.getMinutes() : 0;
+  const seconds = now ? now.getSeconds() : 0;
 
   return (
     <div className="flex h-full w-full flex-col justify-between bg-[#f5f5f3] p-4 text-black sm:p-7">
@@ -93,9 +99,7 @@ function LiveClock() {
                   : "h-1.5 w-px bg-black/25"
               }`}
               style={{
-                transform: `translate(-50%, -100%) rotate(${i * 6}deg) translateY(-${
-                  i % 5 === 0 ? 70 : 70
-                }px)`,
+                transform: `translate(-50%, -100%) rotate(${i * 6}deg) translateY(-70px)`,
               }}
             />
           ))}
@@ -127,6 +131,7 @@ function LiveClock() {
     </div>
   );
 }
+
 
 function PercentageCard() {
   const [percentage, setPercentage] = useState(0);
@@ -160,9 +165,11 @@ function PercentageCard() {
     setIsVisible(false);
   };
 
-  useEffect(() => {
-    return () => tweenRef.current?.kill();
-  }, []);
+useEffect(() => {
+  return () => {
+    tweenRef.current?.kill();
+  };
+}, []);
 
   return (
     <div
