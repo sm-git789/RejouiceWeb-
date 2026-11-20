@@ -27,7 +27,6 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
 
     const ctx = gsap.context(() => {
 
-      // Initial small size to full size on scroll
 
       gsap.fromTo(
         video,
@@ -61,8 +60,7 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
       className="relative w-full overflow-hidden bg-white py-20 md:py-28"
     >
 
-      {/* VIDEO CONTAINER */}
-
+   
       <div className="mx-auto w-full px-6 md:px-12">
 
         <div

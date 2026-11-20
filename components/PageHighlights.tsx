@@ -28,7 +28,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const [isHovered, setIsHovered] = useState(false);
 
-  // SCROLL ANIMATION
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -80,7 +79,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     return () => ctx.revert();
   }, []);
 
-  // MOUSE ENTER
   const handleMouseEnter = () => {
     setIsHovered(true);
 
@@ -91,7 +89,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       ease: "power3.out",
     });
 
-    // START VIDEO
     const videoElement = videoRef.current;
 
     if (videoElement) {
@@ -102,7 +99,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }
   };
 
-  // MOUSE MOVE - VIDEO AND TEXT FOLLOW CURSOR
   const handleMouseMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === "touch") return;
 
@@ -125,7 +121,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     });
   };
 
-  // MOUSE LEAVE
   const handleMouseLeave = () => {
     setIsHovered(false);
 
@@ -136,14 +131,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       ease: "power2.out",
     });
 
-    // STOP VIDEO
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
   };
 
-  // PLAY VIDEO WHEN IT IS READY
   const handleVideoReady = () => {
     if (isHovered) {
       videoRef.current?.play().catch(() => {});
@@ -158,7 +151,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       onPointerLeave={handleMouseLeave}
       className={`relative w-full overflow-hidden bg-zinc-900 ${className}`}
     >
-      {/* BACKGROUND IMAGE */}
       <img
         ref={imageRef}
         src={image}
@@ -167,11 +159,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      {/* PROJECT LOGO - VISIBLE WHEN CURSOR LEAVES */}
-      {/* PROJECT LOGO - BOTTOM OF IMAGE */}
       <div
         className={`absolute bottom-6 md:bottom-10 left-0 w-full flex justify-center items-center z-10 pointer-events-none transition-all duration-500 ${
           isHovered ? "opacity-0 translate-y-5" : "opacity-100 translate-y-0"
@@ -184,17 +173,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         />
       </div>
 
-      {/* MOUSE FOLLOWING VIDEO + TEXT */}
       <div
         ref={previewRef}
         className="absolute top-0 left-0 z-20 pointer-events-none flex flex-col font-[Satoshi] items-center w-[190px] md:w-[220px]"
       >
-        {/* TEXT ABOVE VIDEO */}
         <p className="text-white text-xs md:text-sm font-light mb-0 whitespace-nowrap">
           Case study {title}
         </p>
 
-        {/* VIDEO */}
         <div className="w-full aspect-[4/5] overflow-hidden shadow-2xl bg-black">
           <video
             ref={videoRef}
@@ -212,17 +198,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 };
 
-
-
 const PageHighlights: React.FC = () => {
   return (
     <section className="w-full bg-black text-white px-4 md:px-10 py-20">
-
-      {/* SECTION HEADER */}
       <div className="flex justify-between items-center mb-8 font-[Satoshi]">
-        <h2 className="text-xl md:text-2xl font-light">
-          Highlights
-        </h2>
+        <h2 className="text-xl md:text-2xl font-light">Highlights</h2>
 
         <a
           href="#work"
@@ -232,7 +212,6 @@ const PageHighlights: React.FC = () => {
         </a>
       </div>
 
-      {/* FIRST LARGE IMAGE */}
       <ProjectCard
         title="Rivian"
         image="/assets/rivian.avif"
@@ -241,9 +220,7 @@ const PageHighlights: React.FC = () => {
         className="h-[100vh] md:h-[120vh]"
       />
 
-      {/* TWO SIDE-BY-SIDE IMAGES */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 mt-5">
-
         <ProjectCard
           title="Oura Ring"
           image="/assets/Oura.avif"
@@ -259,11 +236,9 @@ const PageHighlights: React.FC = () => {
           logo="/assets/mixion-logo-white.svg"
           className="h-[90vh] md:h-[110vh]"
         />
-
       </div>
     </section>
   );
 };
 
 export default PageHighlights;
-

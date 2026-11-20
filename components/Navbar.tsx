@@ -4,7 +4,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-// ---------------- NAV ITEM ----------------
+
 
 interface NavItemsProps {
   children: React.ReactNode;
@@ -75,7 +75,7 @@ const NavItem: React.FC<NavItemsProps> = ({
   );
 };
 
-// ---------------- NAVBAR ----------------
+
 
 const Navbar: React.FC = () => {
   const [isLight, setIsLight] = useState(false);
@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
     { title: "Contact", href: "#contact" },
   ];
 
-  // Detect background section behind navbar
+
   useEffect(() => {
     const updateNavbarColor = () => {
       const sections = document.querySelectorAll<HTMLElement>(
@@ -136,11 +136,11 @@ const Navbar: React.FC = () => {
         fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
       }}
     >
-      {/* NAVBAR HEADER */}
+   
 
       <div className="relative z-[60] grid h-[65px] w-full grid-cols-3 items-center px-5 md:px-8">
 
-        {/* LOGO */}
+    
 
         <div className="justify-self-start">
           <a
@@ -153,7 +153,7 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        {/* DESKTOP NAVIGATION */}
+       
 
         <div className="hidden items-center justify-center gap-5 md:flex lg:gap-7">
           {navigation.map((item) => (
@@ -167,7 +167,7 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* LET'S TALK */}
+        
 
         <div className="hidden justify-self-end md:block">
           <a
@@ -180,7 +180,7 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        {/* MOBILE HAMBURGER */}
+       
 
         <button
           type="button"
@@ -195,7 +195,7 @@ const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* MOBILE MENU */}
+      
 
       <div
         className="fixed left-0 top-0 z-50 w-full overflow-hidden bg-black transition-[height] duration-500 ease-in-out md:hidden"

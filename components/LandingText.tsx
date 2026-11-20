@@ -67,6 +67,7 @@
 
 
 
+
 "use client";
 
 import React from "react";
@@ -76,21 +77,22 @@ const Page1: React.FC = () => {
     <section
       id="home"
       data-navbar-theme="dark"
-      className="relative h-screen min-h-[600px] w-full overflow-hidden bg-black text-white"
+      className="relative min-h-[600px] h-[100svh] w-full overflow-hidden bg-black text-white"
     >
-      {/* MAIN REJOICE HEADING */}
-
-      <div className="absolute left-0 top-0 flex w-full justify-center pt-[10vh]">
-
+      {/* Main heading */}
+      <div className="absolute left-0 top-0 flex w-full justify-center pt-[13vh] sm:pt-[10vh]">
         <h1
           className="
             w-full
-            px-[2vw]
+            px-1 sm:px-[2vw]
             text-center
             font-[Satoshi]
-            text-[20.5vw]
+            text-[19vw]
+            sm:text-[20vw]
+            md:text-[20.5vw]
             font-black
-            leading-[0.78]
+            leading-[0.85]
+            sm:leading-[0.78]
             tracking-[-0.075em]
             whitespace-nowrap
             select-none
@@ -98,17 +100,33 @@ const Page1: React.FC = () => {
         >
           REJO<u className="no-underline">U</u>ICE
         </h1>
-
       </div>
 
-      {/* BOTTOM CONTENT */}
-
-      <div className="absolute bottom-0 left-0 flex w-full items-end justify-between px-6 pb-[9vh] md:px-[2.6vw]">
-
-        {/* LEFT BOTTOM TEXT */}
-
-        <div className="flex gap-12 font-[Satoshi] text-[clamp(12px,1vw,16px)] font-light leading-[1.2] tracking-[-0.02em] text-white/90 md:gap-[4.5vw]">
-
+      {/* Bottom content */}
+      <div
+        className="
+          absolute bottom-0 left-0
+          flex w-full items-end justify-between
+          gap-3
+          px-4 pb-[6vh]
+          sm:px-6 sm:pb-[9vh]
+          md:px-[2.6vw]
+        "
+      >
+        {/* Description */}
+        <div
+          className="
+            flex gap-5
+            font-[Satoshi]
+            text-[11px]
+            sm:gap-8 sm:text-[13px]
+            md:gap-[4.5vw] md:text-[clamp(12px,1vw,16px)]
+            font-light
+            leading-[1.3]
+            tracking-[-0.02em]
+            text-white/90
+          "
+        >
           <p>
             Strategy, Design,
             <br />
@@ -120,17 +138,13 @@ const Page1: React.FC = () => {
             <br />
             &amp; Technology Agency.
           </p>
-
         </div>
 
-        {/* DOWN ARROW */}
-
-        <div className="animate-bounce font-[Satoshi] text-[20px] font-light text-white/90">
+        {/* Scroll indicator */}
+        <div className="shrink-0 animate-bounce font-[Satoshi] text-[18px] font-light text-white/90 sm:text-[20px]">
           ↓
         </div>
-
       </div>
-
     </section>
   );
 };

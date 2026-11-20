@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
     if (!footer) return;
 
     const ctx = gsap.context(() => {
-      // Footer content reveal animation
+      
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footer,
@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
         },
       });
 
-      // Main heading and footer details
+      
       tl.fromTo(
         ".footer-reveal",
         {
@@ -41,8 +41,6 @@ const Footer: React.FC = () => {
         },
         0
       );
-
-      // Large Rejouice logo moves upward
       tl.fromTo(
         ".footer-wordmark",
         {
@@ -70,21 +68,20 @@ const Footer: React.FC = () => {
      
       <div className="flex min-h-screen flex-col px-6 pt-8 md:px-[2.6vw] md:pt-10">
 
-        {/* ---------------- TOP FOOTER CONTENT ---------------- */}
+      
 
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-0">
 
-          {/* LEFT CONTENT */}
+          
 
           <div className="md:col-span-7">
 
-            {/* MAIN TEXT */}
-
+           
             <h2 className="footer-reveal text-[26px] font-light tracking-[-0.045em] md:text-[32px]">
               Do it once. Do it right.
             </h2>
 
-            {/* NEW BUSINESS */}
+            
 
             <div className="footer-reveal mt-10 text-[12px] font-light leading-[1.3] text-white/90">
               <p>New Business:</p>
@@ -97,7 +94,7 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            {/* NEWSLETTER */}
+            
 
             <div className="footer-reveal mt-8 max-w-[290px]">
 
@@ -129,11 +126,11 @@ const Footer: React.FC = () => {
 
           </div>
 
-          {/* RIGHT CONTENT */}
+         
           <div className="grid grid-cols-2 gap-2 text-[12px] font-light leading-[1.5] md:col-span-5 md:grid-cols-2 md:translate-x-48">
          
 
-            {/* NAVIGATION */}
+          
 
             <div className="footer-reveal flex flex-col items-start gap-[2px]">
 
@@ -143,7 +140,7 @@ const Footer: React.FC = () => {
               <a href="#services" className="hover:opacity-50">Services</a>
               <a href="#contact" className="hover:opacity-50">Contact</a>
 
-              {/* LOCATIONS */}
+             
 
               <div className="mt-16 leading-[1.2]">
                 <p>San Diego—USA</p>
@@ -152,7 +149,7 @@ const Footer: React.FC = () => {
 
             </div>
 
-            {/* SOCIAL LINKS */}
+            
 
             <div className="footer-reveal flex flex-col items-start gap-[2px]">
 
@@ -174,7 +171,7 @@ const Footer: React.FC = () => {
                 LinkedIn ↗
               </a>
 
-              {/* TERMS */}
+             
 
               <div className="mt-16 leading-[1.2]">
                 <a href="#terms" className="hover:opacity-50">
@@ -189,35 +186,40 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* ---------------- LARGE FOOTER LOGO ---------------- */}
+        
 
         <div className="mt-auto w-full overflow-hidden pt-16">
 
-         {/* ---------------- LARGE FOOTER LOGO ---------------- */}
+       
 
-<div className="mt-auto w-full overflow-hidden pt-16">
+
+<div className="mt-auto w-full overflow-hidden pt-12 sm:pt-16">
 
   <h1
     className="
       footer-wordmark
       w-full
-      px-[2vw]
+      px-2 sm:px-[2vw]
       text-center
       font-[Satoshi]
-      text-[20.5vw]
+      text-[19vw]
+      sm:text-[20vw]
+      md:text-[20.5vw]
       font-black
-      leading-[0.78]
+      leading-[0.85]
+      sm:leading-[0.78]
       tracking-[-0.075em]
       whitespace-nowrap
       select-none
       text-white
     "
-    aria-label="REJO U ICE"
+    aria-label="REJOUICE"
   >
     REJO<u className="no-underline">U</u>ICE
   </h1>
 
 </div>
+
 
         </div>
 

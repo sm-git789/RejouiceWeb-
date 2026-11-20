@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useLayoutEffect, useRef } from "react";
@@ -39,7 +38,7 @@ const OurApproach: React.FC = () => {
           stagger: 0.2,
           ease: "power2.inOut",
         },
-        "-=0.5"
+        "-=0.5",
       );
 
       tl.from(
@@ -51,7 +50,7 @@ const OurApproach: React.FC = () => {
           stagger: 0.15,
           ease: "power3.out",
         },
-        "-=0.5"
+        "-=0.5",
       );
     }, section);
 
@@ -68,21 +67,13 @@ const OurApproach: React.FC = () => {
       }}
     >
       <div className="px-6 pt-16 pb-20 md:px-12 md:pt-[70px]">
-
-        {/* HEADING */}
-
         <h2 className="approach-heading mb-[100px] text-[52px] font-[Rejoice] font-light leading-[1.05] tracking-[-0.055em] text-[#222222] md:mb-[135px] md:text-[76px]">
           Our approach.
         </h2>
 
-        {/* TOP DIVIDER */}
-
         <div className="approach-rule h-px w-full origin-left bg-[#d2d2d2]" />
 
-        {/* FIRST ROW */}
-
         <div className="grid grid-cols-1 gap-8 py-7 md:grid-cols-2 md:gap-0 md:py-[27px]">
-
           <div className="approach-copy">
             <p className="max-w-[430px] text-[20px] font-[Rejoice] font-light leading-[1.28] tracking-[-0.035em] md:text-[23px]">
               A simple philosophy:
@@ -93,24 +84,16 @@ const OurApproach: React.FC = () => {
 
           <div className="approach-copy">
             <p className="max-w-[430px] font-[Rejoice] text-[20px] font-light leading-[1.28] tracking-[-0.035em] md:text-[23px]">
-              We partner with five clients a year to
-              deliver unmatched focus, and impact.
-              Every detail is carefully crafted, every
-              decision strategic, and every outcome
-              transformative.
+              We partner with five clients a year to deliver unmatched focus,
+              and impact. Every detail is carefully crafted, every decision
+              strategic, and every outcome transformative.
             </p>
           </div>
-
         </div>
-
-        {/* MIDDLE DIVIDER */}
 
         <div className="approach-rule h-px w-full origin-left bg-[#d2d2d2]" />
 
-        {/* SECOND ROW */}
-
         <div className="grid grid-cols-1 gap-8 py-7 md:grid-cols-2 md:gap-0 md:py-[27px]">
-
           <div className="approach-copy">
             <p className="max-w-[430px] text-[20px] font-light font-[Rejoice] leading-[1.28] tracking-[-0.035em] md:text-[23px]">
               Performance &amp; emotion.
@@ -121,19 +104,13 @@ const OurApproach: React.FC = () => {
 
           <div className="approach-copy">
             <p className="max-w-[430px] text-[20px] font-[Rejoice] font-light leading-[1.28] tracking-[-0.035em] md:text-[23px]">
-              We craft brands that become category
-              leaders. These brands aren’t built on
-              products alone. Emotional connection
-              and sustainable growth are the two
-              essentials to get there. This is how you
-              drive retention and advocacy.
+              We craft brands that become category leaders. These brands aren’t
+              built on products alone. Emotional connection and sustainable
+              growth are the two essentials to get there. This is how you drive
+              retention and advocacy.
             </p>
           </div>
-
         </div>
-
-        
-
       </div>
     </section>
   );

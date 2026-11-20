@@ -13,7 +13,7 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
   const wordRefs = useRef<HTMLSpanElement[]>([]);
   const callbackRef = useRef(onLoadingComplete);
 
-  // Keep the latest callback
+  
   React.useEffect(() => {
     callbackRef.current = onLoadingComplete;
   }, [onLoadingComplete]);
@@ -29,12 +29,11 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
         },
       });
 
-      // Loader initial position
+   
       gsap.set(loader, {
         yPercent: 0,
       });
 
-      // Text appears word by word
       tl.fromTo(
         wordRefs.current,
         {
@@ -50,12 +49,11 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
         }
       );
 
-      // Hold text
+  
       tl.to({}, {
         duration: 0.8,
       });
 
-      // White loader moves downward
       tl.to(loader, {
         yPercent: 100,
         duration: 1.4,
@@ -74,7 +72,7 @@ const Loader: React.FC<LoaderProps> = ({ onLoadingComplete }) => {
       ref={loaderRef}
       className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-white"
     >
-      {/* LOADER TEXT */}
+    
 
       <div className="flex items-baseline justify-center gap-2 whitespace-nowrap px-4 font-[Satoshi] text-[clamp(17px,2vw,30px)] font-light tracking-[-0.035em] text-black">
 

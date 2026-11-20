@@ -11,7 +11,7 @@ const PageAbout: React.FC = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // MAIN HEADING WORD REVEAL
+      
       gsap.fromTo(
         ".heading-word-inner",
         {
@@ -32,7 +32,7 @@ const PageAbout: React.FC = () => {
         },
       );
 
-      // BOTTOM LEFT TEXT
+      
       gsap.fromTo(
         ".bottom-left",
         {
@@ -52,7 +52,7 @@ const PageAbout: React.FC = () => {
         },
       );
 
-      // RIGHT SIDE PARAGRAPHS
+      
       gsap.fromTo(
         ".right-content",
         {
@@ -73,7 +73,7 @@ const PageAbout: React.FC = () => {
         },
       );
 
-      // LEARN MORE LINK
+      
       gsap.fromTo(
         ".learn-more",
         {
@@ -110,7 +110,7 @@ const PageAbout: React.FC = () => {
       }}
       className="about-section w-full min-h-screen bg-black text-white px-6 md:px-10 lg:px-[2.65vw] pt-10 md:pt-14 lg:pt-[1.5vw] pb-16"
     >
-      {/* MAIN HEADING */}
+      
       <div className="main-heading w-full">
         <h1 className="font-light text-[9vw] md:text-[6.5vw] lg:text-[4.4vw] leading-[1.06] tracking-[-0.045em]">
           {heading.split(" ").map((word, index) => (
@@ -128,19 +128,19 @@ const PageAbout: React.FC = () => {
         </h1>
       </div>
 
-      {/* HORIZONTAL DIVIDER */}
+      
       <div className="w-full h-[1px] bg-[#393939] mt-16 md:mt-20 lg:mt-[4.2vw]" />
 
-      {/* BOTTOM CONTENT */}
+     
       <div className="bottom-content grid grid-cols-1 md:grid-cols-2 w-full pt-7 md:pt-8 lg:pt-[1.6vw] gap-12 md:gap-5">
-        {/* LEFT TEXT */}
+     
         <div className="bottom-left">
           <h2 className="font-light text-[19px] md:text-[21px] lg:text-[1.35vw] tracking-[-0.04em]">
             Tomorrow’s brands, today.
           </h2>
         </div>
 
-        {/* RIGHT TEXT */}
+        
         <div className="md:pl-[2vw] lg:pl-[0.5vw] max-w-[430px]">
           <div className="right-content">
             <p className="font-light text-[18px] md:text-[19px] lg:text-[1.3vw] leading-[1.2] tracking-[-0.04em]">
@@ -156,7 +156,7 @@ const PageAbout: React.FC = () => {
             </p>
           </div>
 
-          {/* LEARN MORE */}
+          
           <div className="learn-more mt-7 md:mt-8">
             <a
               href="#about"

@@ -1,4 +1,3 @@
-
 "use client";
 
 import gsap from "gsap";
@@ -10,11 +9,7 @@ const Page2: React.FC = () => {
 
   const [isReelOpen, setIsReelOpen] = useState(false);
 
-  // ---------------- CURSOR MOVEMENT ----------------
-
-  const handleMouseMove = (
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cursorRef.current) return;
 
     gsap.to(cursorRef.current, {
@@ -45,8 +40,6 @@ const Page2: React.FC = () => {
     });
   };
 
-  // ---------------- INITIAL CURSOR ----------------
-
   useEffect(() => {
     if (cursorRef.current) {
       gsap.set(cursorRef.current, {
@@ -56,8 +49,6 @@ const Page2: React.FC = () => {
       });
     }
   }, []);
-
-  // ---------------- CHANGE CURSOR ON REEL OPEN ----------------
 
   useEffect(() => {
     if (!cursorRef.current) return;
@@ -69,13 +60,9 @@ const Page2: React.FC = () => {
     });
   }, [isReelOpen]);
 
-  // ---------------- OPEN REEL ----------------
-
   const openReel = () => {
     setIsReelOpen(true);
   };
-
-  // ---------------- CLOSE REEL ----------------
 
   const closeReel = () => {
     if (fullVideoRef.current) {
@@ -85,8 +72,6 @@ const Page2: React.FC = () => {
 
     setIsReelOpen(false);
   };
-
-  // ---------------- ESCAPE KEY ----------------
 
   useEffect(() => {
     if (!isReelOpen) return;
@@ -111,12 +96,7 @@ const Page2: React.FC = () => {
 
   return (
     <>
-      {/* ---------------- PAGE 2 ---------------- */}
-
       <div className="page2 relative h-[59vw] w-full bg-black">
-
-        {/* BACKGROUND VIDEO */}
-
         <div
           className="page2-content relative h-full w-full cursor-pointer lg:cursor-none"
           onClick={openReel}
@@ -133,10 +113,7 @@ const Page2: React.FC = () => {
             className="h-full w-full object-cover"
           />
         </div>
-
       </div>
-
-      {/* ---------------- FULLSCREEN REEL ---------------- */}
 
       {isReelOpen && (
         <div
@@ -145,9 +122,6 @@ const Page2: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-
-          {/* FULLSCREEN VIDEO */}
-
           <video
             ref={fullVideoRef}
             src="/assets/reel-full.mp4"
@@ -156,72 +130,53 @@ const Page2: React.FC = () => {
             playsInline
             className="h-full w-full object-contain"
           />
-
         </div>
       )}
 
-
-{/* ---------------- CUSTOM PLAY / CLOSE CURSOR ---------------- */}
-
-
-{/* CUSTOM PLAY / CLOSE CURSOR */}
-
-<button
-  ref={cursorRef}
-  type="button"
-  onClick={isReelOpen ? closeReel : openReel}
-  style={{
-    color: "#ffffff",
-    background: "transparent",
-    border: "none",
-    WebkitAppearance: "none",
-    outline: "none",
-  }}
-  className={`fixed left-0 top-0 z-[200] hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 whitespace-nowrap appearance-none bg-transparent p-0 font-[Satoshi] text-white shadow-none focus:outline-none focus:ring-0 lg:flex ${
-    isReelOpen
-      ? "pointer-events-auto cursor-pointer"
-      : "pointer-events-none"
-  }`}
-  aria-label={isReelOpen ? "Close reel" : "Play reel"}
->
-  {isReelOpen ? (
-    <>
-      <span className="text-[16px] font-light leading-none">
-        ×
-      </span>
-
-      <span className="text-[11px] font-light tracking-wide text-white">
-        Close reel
-      </span>
-    </>
-  ) : (
-    <>
-      {/* White SVG Play Icon */}
-
-      <svg
-        width="10"
-        height="10"
-        viewBox="0 0 12 12"
-        fill="none"
-        aria-hidden="true"
+      <button
+        ref={cursorRef}
+        type="button"
+        onClick={isReelOpen ? closeReel : openReel}
+        style={{
+          color: "#ffffff",
+          background: "transparent",
+          border: "none",
+          WebkitAppearance: "none",
+          outline: "none",
+        }}
+        className={`fixed left-0 top-0 z-[200] hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 whitespace-nowrap appearance-none bg-transparent p-0 font-[Satoshi] text-white shadow-none focus:outline-none focus:ring-0 lg:flex ${
+          isReelOpen
+            ? "pointer-events-auto cursor-pointer"
+            : "pointer-events-none"
+        }`}
+        aria-label={isReelOpen ? "Close reel" : "Play reel"}
       >
-        <path
-          d="M3 1.5L10 6L3 10.5V1.5Z"
-          fill="#FFFFFF"
-        />
-      </svg>
+        {isReelOpen ? (
+          <>
+            <span className="text-[16px] font-light leading-none">×</span>
 
-      <span className="text-[11px] font-light tracking-wide text-white">
-        Play reel
-      </span>
-    </>
-  )}
-</button>
+            <span className="text-[11px] font-light tracking-wide text-white">
+              Close reel
+            </span>
+          </>
+        ) : (
+          <>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M3 1.5L10 6L3 10.5V1.5Z" fill="#FFFFFF" />
+            </svg>
 
-
-
-
-      {/* MOBILE CLOSE BUTTON */}
+            <span className="text-[11px] font-light tracking-wide text-white">
+              Play reel
+            </span>
+          </>
+        )}
+      </button>
 
       {isReelOpen && (
         <button
@@ -233,7 +188,6 @@ const Page2: React.FC = () => {
           ×
         </button>
       )}
-
     </>
   );
 };

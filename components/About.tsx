@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useLayoutEffect, useRef } from "react";
@@ -35,7 +34,7 @@ const About: React.FC = () => {
       {
         yPercent: -110,
       },
-      0
+      0,
     );
 
     tl.to(
@@ -43,7 +42,7 @@ const About: React.FC = () => {
       {
         yPercent: 0,
       },
-      0
+      0,
     );
 
     tweenRef.current = tl;
@@ -66,7 +65,7 @@ const About: React.FC = () => {
       {
         yPercent: 110,
       },
-      0
+      0,
     );
 
     tl.to(
@@ -74,7 +73,7 @@ const About: React.FC = () => {
       {
         yPercent: 0,
       },
-      0
+      0,
     );
 
     tweenRef.current = tl;
@@ -82,7 +81,6 @@ const About: React.FC = () => {
 
   return (
     <section className="flex min-h-[70vh] w-full items-center justify-center bg-white">
-
       <a
         href="/about"
         aria-label="About Us"
@@ -90,13 +88,7 @@ const About: React.FC = () => {
         onMouseLeave={handleMouseLeave}
         className="group inline-block cursor-pointer font-[Satoshi] text-[42px] font-light tracking-[-0.045em] text-black md:text-[64px]"
       >
-
-        {/* TEXT ANIMATION CONTAINER */}
-
         <span className="grid overflow-hidden leading-[1.15]">
-
-          {/* DEFAULT TEXT */}
-
           <span
             ref={aboutRef}
             aria-hidden="true"
@@ -105,8 +97,6 @@ const About: React.FC = () => {
             About Us
           </span>
 
-          {/* HOVER TEXT */}
-
           <span
             ref={knowRef}
             aria-hidden="true"
@@ -114,11 +104,8 @@ const About: React.FC = () => {
           >
             Get to know us
           </span>
-
         </span>
-
       </a>
-
     </section>
   );
 };
