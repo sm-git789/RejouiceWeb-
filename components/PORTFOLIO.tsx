@@ -26,8 +26,6 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
     if (!section || !video) return;
 
     const ctx = gsap.context(() => {
-
-
       gsap.fromTo(
         video,
         {
@@ -45,13 +43,11 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
           },
         }
       );
-
     }, section);
 
     return () => {
       ctx.revert();
     };
-
   }, []);
 
   return (
@@ -59,17 +55,13 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-white py-20 md:py-28"
     >
-
-   
       <div className="mx-auto w-full px-6 md:px-12">
-
         <div
           ref={videoRef}
-          className="relative mx-auto aspect-[16/9] w-full overflow-hidden  will-change-transform"
+          className="relative mx-auto aspect-[16/9] w-full overflow-hidden will-change-transform"
         >
-
           <video
-            src="/assets/PORTFOLIO.mp4"
+            src={src}
             poster={poster}
             autoPlay
             muted
@@ -78,11 +70,8 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
             preload="metadata"
             className="absolute inset-0 h-full w-full object-cover"
           />
-
         </div>
-
       </div>
-
     </section>
   );
 };

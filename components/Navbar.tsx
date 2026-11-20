@@ -224,7 +224,7 @@ const Navbar: React.FC = () => {
             onClick={closeMenu}
             className="mt-5 text-[15px] font-light text-white"
           >
-            Let's talk ↗
+            Let&apos;s talk ↗
           </a>
         </div>
       </div>
