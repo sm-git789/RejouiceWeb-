@@ -4,10 +4,9 @@ import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 
 interface LoaderProps {
-  children: React.ReactNode;
-  onLoadingComplete?: () => void;
+  children?: React.ReactNode;
+  onLoadingComplete: () => void;
 }
-
 const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
   const loaderRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
