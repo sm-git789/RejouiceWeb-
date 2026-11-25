@@ -6,19 +6,31 @@ import { gsap } from "gsap";
 const About: React.FC = () => {
   const aboutRef = useRef<HTMLSpanElement>(null);
   const knowRef = useRef<HTMLSpanElement>(null);
+
+  const aboutLineRef = useRef<HTMLSpanElement>(null);
+  const knowLineRef = useRef<HTMLSpanElement>(null);
+
   const tweenRef = useRef<gsap.core.Timeline | null>(null);
 
   useLayoutEffect(() => {
     gsap.set(aboutRef.current, { yPercent: 0 });
     gsap.set(knowRef.current, { yPercent: 110 });
 
+    gsap.set(aboutLineRef.current, {
+      scaleX: 1,
+      transformOrigin: "center center",
+    });
+
+    gsap.set(knowLineRef.current, {
+      scaleX: 0,
+      transformOrigin: "center center",
+    });
     return () => {
       tweenRef.current?.kill();
     };
   }, []);
 
   // HOVER ENTER
-
   const handleMouseEnter = () => {
     tweenRef.current?.kill();
 
@@ -29,6 +41,7 @@ const About: React.FC = () => {
       },
     });
 
+    // Text animation
     tl.to(
       aboutRef.current,
       {
@@ -45,11 +58,31 @@ const About: React.FC = () => {
       0,
     );
 
+    // Underline animation
+    tl.to(
+      aboutLineRef.current,
+      {
+        scaleX: 0,
+        duration: 0.4,
+        ease: "power2.inOut",
+      },
+      0,
+    );
+
+    tl.to(
+      knowLineRef.current,
+      {
+        scaleX: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      },
+      0.15,
+    );
+
     tweenRef.current = tl;
   };
 
   // HOVER LEAVE
-
   const handleMouseLeave = () => {
     tweenRef.current?.kill();
 
@@ -60,6 +93,7 @@ const About: React.FC = () => {
       },
     });
 
+    // Text animation
     tl.to(
       knowRef.current,
       {
@@ -76,6 +110,27 @@ const About: React.FC = () => {
       0,
     );
 
+    // Underline animation
+    tl.to(
+      knowLineRef.current,
+      {
+        scaleX: 0,
+        duration: 0.4,
+        ease: "power2.inOut",
+      },
+      0,
+    );
+
+    tl.to(
+      aboutLineRef.current,
+      {
+        scaleX: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      },
+      0.15,
+    );
+
     tweenRef.current = tl;
   };
 
@@ -86,23 +141,32 @@ const About: React.FC = () => {
         aria-label="About Us"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="group inline-block cursor-pointer font-[Satoshi] text-[42px] font-light tracking-[-0.045em] text-black md:text-[64px]"
+        className="inline-block cursor-pointer font-[Satoshi] text-[42px] font-light tracking-[-0.045em] text-black md:text-[64px]"
       >
-        <span className="grid overflow-hidden leading-[1.15]">
+        <span className="grid w-max overflow-hidden leading-[1.15]">
           <span
             ref={aboutRef}
             aria-hidden="true"
-            className="col-start-1 row-start-1 whitespace-nowrap border-b-[2px] border-black pb-[2px]"
+            className="col-start-1 row-start-1 inline-block w-fit justify-self-center whitespace-nowrap text-center"
           >
             About Us
+            <span
+              ref={aboutLineRef}
+              className="mt-[2px] block h-[1.5px] w-full origin-center bg-black"
+            />
           </span>
 
+          {/* GET TO KNOW US */}
           <span
             ref={knowRef}
             aria-hidden="true"
-            className="col-start-1 row-start-1 whitespace-nowrap border-b-[2px] border-black pb-[2px]"
+            className="col-start-1 row-start-1 inline-block w-fit justify-self-center whitespace-nowrap text-center"
           >
             Get to know us
+            <span
+              ref={knowLineRef}
+              className="mt-[2px] block h-[1.5px] w-full origin-center bg-black"
+            />
           </span>
         </span>
       </a>

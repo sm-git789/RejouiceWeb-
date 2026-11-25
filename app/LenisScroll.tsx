@@ -1,28 +1,33 @@
 
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Lenis from 'lenis';
+import { useEffect } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function LenisScroll() {
   useEffect(() => {
-    const lenis = new Lenis();
-
-    lenis.on('scroll', (e) => {
-      console.log(e);
+    const lenis = new Lenis({
+      autoRaf: false,
     });
 
-    let rafId: number;
+    // Notify ScrollTrigger whenever Lenis scrolls
+    lenis.on("scroll", ScrollTrigger.update);
 
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
+    // Synchronize Lenis with GSAP ticker
+    const update = (time: number) => {
+      lenis.raf(time * 1000);
+    };
 
-    rafId = requestAnimationFrame(raf);
+    gsap.ticker.add(update);
+
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(update);
       lenis.destroy();
     };
   }, []);

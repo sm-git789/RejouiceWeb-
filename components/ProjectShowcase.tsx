@@ -2,6 +2,9 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const brandLogos = [
   "/assets/oura-logo-white.svg",
@@ -18,6 +21,10 @@ const awardLogos = [
   "/assets/Behance.svg",
   "/assets/Webby-Awards.svg",
 ];
+
+// =====================================
+// ROTATING LOGOS
+// =====================================
 
 function RotatingLogos({ logos }: { logos: string[] }) {
   const [active, setActive] = useState(0);
@@ -43,14 +50,16 @@ function RotatingLogos({ logos }: { logos: string[] }) {
   );
 }
 
+// =====================================
+// LIVE CLOCK
+// =====================================
 
 function LiveClock() {
-  const [now, setNow] = useState<Date | null>(null);
+  const [now, setNow] = useState<Date>(new Date());
+  const [handTime, setHandTime] = useState<Date | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    // Set the current time after the component mounts
-    setNow(new Date());
-
     const interval = window.setInterval(() => {
       setNow(new Date());
     }, 1000);
@@ -58,80 +67,136 @@ function LiveClock() {
     return () => window.clearInterval(interval);
   }, []);
 
-  const getTime = (timezone: string) =>
-    now
-      ? new Intl.DateTimeFormat("en-US", {
-          timeZone: timezone,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        }).format(now)
-      : "--:--:--";
+  useEffect(() => {
+    if (!isHovered) {
+      setHandTime(null);
+      return;
+    }
 
-  const hours = now ? now.getHours() % 12 : 0;
-  const minutes = now ? now.getMinutes() : 0;
-  const seconds = now ? now.getSeconds() : 0;
+    let animationFrame: number;
+
+    const updateHands = () => {
+      setHandTime(new Date());
+      animationFrame = requestAnimationFrame(updateHands);
+    };
+
+    updateHands();
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [isHovered]);
+
+  const getTime = (timezone: string) =>
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    })
+      .format(now)
+      .replace(/\s/g, "");
+
+  const milliseconds = handTime ? handTime.getMilliseconds() : 0;
+
+  const seconds = handTime ? handTime.getSeconds() + milliseconds / 1000 : 0;
+
+  const minutes = handTime ? handTime.getMinutes() + seconds / 60 : 0;
+
+  const hours = handTime ? (handTime.getHours() % 12) + minutes / 60 : 0;
+
+  const secondRotation = seconds * 6;
+  const minuteRotation = minutes * 6;
+  const hourRotation = hours * 30;
 
   return (
-    <div className="flex h-full w-full flex-col justify-between bg-[#f5f5f3] p-4 text-black sm:p-7">
-      <div className="flex justify-between gap-2 text-[10px] leading-[1.5] sm:text-[12px]">
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="flex h-full w-full flex-col justify-between rounded-[3px] bg-[#f5f5f3] p-4 text-black sm:p-7 md:p-10"
+    >
+      {/* OFFICE DETAILS */}
+
+      <div className="flex justify-between gap-2 font-[Satoshi] text-[12px] leading-[1.5] sm:text-[14px] md:text-[16px]">
         <div>
-          <p className="mb-1">2 Offices</p>
-          <p className="text-black/50">San Diego, USA</p>
-          <p className="text-black/50">Paris, France</p>
+          <p className="mb-1 text-black">2 Offices</p>
+          <p className="text-black/45">San Diego, USA</p>
+          <p className="text-black/45">Paris, France</p>
         </div>
 
-        <div className="text-right tabular-nums">
+        <div className="text-right tabular-nums whitespace-nowrap text-black/45">
           <p>{getTime("America/Los_Angeles")}</p>
           <p>{getTime("Europe/Paris")}</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-center pb-1 sm:pb-2">
-        <div className="relative h-[155px] w-[155px] rounded-full sm:h-[190px] sm:w-[190px]">
-          {Array.from({ length: 60 }).map((_, i) => (
-            <div
-              key={i}
-              className={`absolute left-1/2 top-1/2 origin-bottom ${
-                i % 5 === 0
-                  ? "h-2.5 w-[1.5px] bg-black/60 sm:h-3"
-                  : "h-1.5 w-px bg-black/25"
-              }`}
-              style={{
-                transform: `translate(-50%, -100%) rotate(${i * 6}deg) translateY(-70px)`,
-              }}
-            />
-          ))}
+      {/* ANALOG CLOCK */}
+
+      <div className="flex flex-1 items-center justify-center">
+        <div className="relative h-[190px] w-[190px] rounded-full sm:h-[230px] sm:w-[230px] md:h-[260px] md:w-[260px]">
+          {/* 60 CLOCK MARKS */}
+
+          {Array.from({ length: 60 }).map((_, i) => {
+            const isMajor = i % 15 === 0;
+            const isMedium = i % 5 === 0;
+
+            return (
+              <div
+                key={i}
+                className={`absolute left-1/2 top-1/2 origin-bottom ${
+                  isMajor
+                    ? "h-[24px] w-[1.5px] bg-black/55"
+                    : isMedium
+                      ? "h-[17px] w-px bg-black/35"
+                      : "h-[12px] w-px bg-black/25"
+                }`}
+                style={{
+                  transform: `translate(-50%, -100%) rotate(${i * 6}deg) translateY(-128px)`,
+                }}
+              />
+            );
+          })}
+
+          {/* HOUR HAND */}
 
           <div
-            className="absolute left-1/2 top-1/2 h-[40px] w-[3px] origin-bottom rounded-full bg-black sm:h-[48px]"
+            className="absolute left-1/2 top-1/2 h-[45px] w-[2px] origin-bottom rounded-full bg-black/75"
             style={{
-              transform: `translate(-50%, -100%) rotate(${hours * 30 + minutes * 0.5}deg)`,
+              transform: `translate(-50%, -100%) rotate(${hourRotation}deg)`,
             }}
           />
 
+          {/* MINUTE HAND */}
+
           <div
-            className="absolute left-1/2 top-1/2 h-[53px] w-[2px] origin-bottom rounded-full bg-black sm:h-[65px]"
+            className="absolute left-1/2 top-1/2 h-[72px] w-[1.5px] origin-bottom rounded-full bg-black/80"
             style={{
-              transform: `translate(-50%, -100%) rotate(${minutes * 6 + seconds * 0.1}deg)`,
+              transform: `translate(-50%, -100%) rotate(${minuteRotation}deg)`,
             }}
           />
 
+          {/* SECOND HAND */}
+
           <div
-            className="absolute left-1/2 top-1/2 h-[62px] w-px origin-bottom bg-black sm:h-[75px]"
+            className="absolute left-1/2 top-1/2 h-[95px] w-[1px] origin-bottom bg-black/65"
             style={{
-              transform: `translate(-50%, -100%) rotate(${seconds * 6}deg)`,
+              transform: `translate(-50%, -100%) rotate(${secondRotation}deg)`,
             }}
           />
 
-          <div className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
+          {/* CENTER DOT */}
+
+          <div className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
         </div>
       </div>
     </div>
   );
 }
 
+// =====================================
+// PERCENTAGE CARD
+// =====================================
 
 function PercentageCard() {
   const [percentage, setPercentage] = useState(0);
@@ -165,11 +230,11 @@ function PercentageCard() {
     setIsVisible(false);
   };
 
-useEffect(() => {
-  return () => {
-    tweenRef.current?.kill();
-  };
-}, []);
+  useEffect(() => {
+    return () => {
+      tweenRef.current?.kill();
+    };
+  }, []);
 
   return (
     <div
@@ -180,6 +245,7 @@ useEffect(() => {
     >
       <div>
         <h3 className="text-[13px] font-normal sm:text-[14px]">Driving 150%</h3>
+
         <p className="text-[12px] text-black/50 sm:text-[13px]">
           LTV:CAC in average
         </p>
@@ -195,6 +261,10 @@ useEffect(() => {
     </div>
   );
 }
+
+// =====================================
+// INDUSTRIES
+// =====================================
 
 const industries = [
   "Finance",
@@ -216,6 +286,10 @@ const industries = [
   "Technology",
 ];
 
+// =====================================
+// OURA CARD
+// =====================================
+
 function OuraCard() {
   const [active, setActive] = useState(0);
 
@@ -229,7 +303,7 @@ function OuraCard() {
 
   const visibleIndustries = Array.from(
     { length: 3 },
-    (_, i) => industries[(active + i) % industries.length]
+    (_, i) => industries[(active + i) % industries.length],
   );
 
   return (
@@ -262,26 +336,86 @@ function OuraCard() {
   );
 }
 
+// =====================================
+// PROJECT SHOWCASE
+// =====================================
+
 const ProjectShowcase: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
 
+  // =====================================
+  // GSAP CARD ENTRANCE ANIMATION
+  // =====================================
+
   useLayoutEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+    const section = sectionRef.current;
 
-    let tween: gsap.core.Tween | undefined;
+    if (!section) return;
 
-    const createAnimation = () => {
-      tween?.kill();
-      gsap.set(track, { x: 0 });
+    const ctx = gsap.context(() => {
+      // Animate only the original cards
+      const firstSet = trackRef.current?.children[0] as HTMLElement | undefined;
 
-      const firstSet = track.children[0] as HTMLElement | undefined;
       if (!firstSet) return;
 
-      const distance = firstSet.offsetWidth;
+      const cards = firstSet.querySelectorAll(".showcase-card");
+
+      // Set initial state
+      gsap.set(cards, {
+        y: 80,
+        autoAlpha: 0,
+      });
+
+      // Animate when section enters viewport
+      gsap.to(cards, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 1,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+          // markers: true, // Enable temporarily for debugging
+        },
+      });
+    }, section);
+
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    let tween: gsap.core.Tween | null = null;
+    let isHovering = false;
+
+    const createAnimation = () => {
+      const firstSet = track.children[0] as HTMLElement;
+
+      if (!firstSet) return;
+
+      const distance = firstSet.getBoundingClientRect().width;
+
       if (!distance) return;
 
+      // Preserve current animation progress
+      const progress = tween?.progress() ?? 0;
+
+      // Remove previous animation
+      tween?.kill();
+
+      // Create one infinite animation
       tween = gsap.to(track, {
         x: -distance,
         duration: 45,
@@ -289,19 +423,26 @@ const ProjectShowcase: React.FC = () => {
         repeat: -1,
       });
 
+      tween.progress(progress);
+
+      // Pause if mouse is already hovering
+      if (isHovering) {
+        tween.pause();
+      }
+
       tweenRef.current = tween;
     };
 
     createAnimation();
 
+    // Recalculate when card dimensions change
     const observer = new ResizeObserver(() => {
-      const wasPaused = tween?.paused() ?? false;
       createAnimation();
-      if (wasPaused) tween?.pause();
     });
 
     observer.observe(track);
 
+    // Cleanup
     return () => {
       observer.disconnect();
       tween?.kill();
@@ -309,29 +450,49 @@ const ProjectShowcase: React.FC = () => {
     };
   }, []);
 
+  // =====================================
+  // PAUSE AND RESUME
+  // =====================================
+
   const pauseAnimation = () => tweenRef.current?.pause();
+
   const resumeAnimation = () => tweenRef.current?.resume();
+
+  // =====================================
+  // CARD SIZES
+  // =====================================
 
   const tallCard =
     "h-[320px] w-[82vw] max-w-[455px] sm:h-[380px] sm:w-[400px] md:h-[450px] md:w-[455px]";
+
   const shortCard =
     "h-[250px] w-[82vw] max-w-[400px] sm:h-[280px] sm:w-[350px] md:h-[300px] md:w-[400px]";
 
+  // =====================================
+  // ALL 9 SHOWCASE CARDS
+  // =====================================
+
   const cards = (
     <>
-   
-      <div className={`${tallCard} shrink-0 overflow-hidden rounded-[3px]`}>
+      {/* CARD 1 - E-COMMERCE */}
+
+      <div
+        className={`showcase-card ${tallCard} shrink-0 overflow-hidden rounded-[3px]`}
+      >
         <div className="relative h-full w-full">
           <img
             src="/assets/Ecommerce.avif"
             alt="E-commerce"
             className="h-full w-full object-cover"
           />
+
           <div className="absolute inset-0 bg-black/10" />
+
           <div className="absolute left-4 top-4 text-white sm:left-6 sm:top-6">
             <h3 className="text-[14px] font-normal tracking-tight sm:text-[15px]">
               E-commerce
             </h3>
+
             <p className="text-[12px] font-light text-white/75 sm:text-[13px]">
               10+ years of expertise
             </p>
@@ -339,32 +500,40 @@ const ProjectShowcase: React.FC = () => {
         </div>
       </div>
 
-  
+      {/* CARD 2 - ENGAGEMENT MODELS */}
+
       <div
-        className={`${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-black p-4 text-white sm:p-6 md:p-7`}
+        className={`showcase-card ${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-black p-4 text-white sm:p-6 md:p-7`}
       >
         <div>
           <h3 className="text-[14px] font-normal sm:text-[15px]">
             2 Engagement
           </h3>
+
           <p className="text-[13px] font-light sm:text-[14px]">Models</p>
+
           <p className="text-[12px] text-white/55 sm:text-[13px]">
             Classic / Venture
           </p>
         </div>
+
         <a href="#contact" className="text-[12px] sm:text-[13px]">
           Learn more ↗
         </a>
       </div>
 
-   
-      <div className={`${shortCard} shrink-0 overflow-hidden rounded-[3px]`}>
+      {/* CARD 3 - PERCENTAGE */}
+
+      <div
+        className={`showcase-card ${shortCard} shrink-0 overflow-hidden rounded-[3px]`}
+      >
         <PercentageCard />
       </div>
 
-   
+      {/* CARD 4 - RIVIAN VIDEO */}
+
       <div
-        className={`${tallCard} relative shrink-0 overflow-hidden rounded-[3px]`}
+        className={`showcase-card ${tallCard} relative shrink-0 overflow-hidden rounded-[3px]`}
       >
         <video
           src="/assets/rivian-campingVd.mp4"
@@ -374,18 +543,23 @@ const ProjectShowcase: React.FC = () => {
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
         />
+
         <div className="absolute inset-0 bg-black/15" />
+
         <div className="absolute left-4 top-4 z-10 max-w-[200px] text-white sm:left-6 sm:top-6 sm:max-w-[220px]">
           <h3 className="text-[13px] font-normal sm:text-[14px]">
             Catalyzed ~71,000
           </h3>
+
           <p className="text-[12px] font-light sm:text-[13px]">
             pre-orders after brand reveal
           </p>
+
           <p className="text-[11px] sm:text-[12px]">
             (approximately $5.68 billion).
           </p>
         </div>
+
         <img
           src="/assets/rivian-white.svg"
           alt="Rivian"
@@ -393,23 +567,28 @@ const ProjectShowcase: React.FC = () => {
         />
       </div>
 
+      {/* CARD 5 - NOOVO */}
 
       <div
-        className={`${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-[#f5f5f3] p-4 sm:p-6 md:p-7`}
+        className={`showcase-card ${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-[#f5f5f3] p-4 sm:p-6 md:p-7`}
       >
         <div>
           <h3 className="text-[14px] font-normal sm:text-[15px]">
             $5M+ in new
           </h3>
+
           <p className="text-[13px] sm:text-[14px]">business</p>
+
           <p className="text-[12px] text-black/50 sm:text-[13px]">
             generated within 90 days of launch
           </p>
         </div>
+
         <div className="flex items-center justify-between gap-2">
           <a href="#contact" className="text-[12px] sm:text-[13px]">
             Case Study ↗
           </a>
+
           <img
             src="/assets/noovo-logoBlack.svg"
             alt="Noovo"
@@ -418,56 +597,81 @@ const ProjectShowcase: React.FC = () => {
         </div>
       </div>
 
-      <div className={`${tallCard} shrink-0 overflow-hidden rounded-[3px]`}>
+      {/* CARD 6 - LIVE CLOCK */}
+
+      <div
+        className={`showcase-card ${tallCard} shrink-0 overflow-hidden rounded-[3px]`}
+      >
         <LiveClock />
       </div>
 
-     
+      {/* CARD 7 - 60 BRANDS */}
+
       <div
-        className={`${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-black p-4 text-white sm:p-6 md:p-7`}
+        className={`showcase-card ${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-black p-4 text-white sm:p-6 md:p-7`}
       >
         <div>
           <h3 className="text-[14px] font-normal sm:text-[15px]">60 brands</h3>
+
           <p className="text-[12px] font-light text-white/60 sm:text-[13px]">
             successfully launched since 2013.
           </p>
         </div>
+
         <RotatingLogos logos={brandLogos} />
       </div>
 
-      <div className={`${tallCard} shrink-0 overflow-hidden rounded-[3px]`}>
+      {/* CARD 8 - OURA */}
+
+      <div
+        className={`showcase-card ${tallCard} shrink-0 overflow-hidden rounded-[3px]`}
+      >
         <OuraCard />
       </div>
 
-      
+      {/* CARD 9 - AWARDS */}
+
       <div
-        className={`${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-[#f5f5f3] p-4 sm:p-6 md:p-7`}
+        className={`showcase-card ${shortCard} flex shrink-0 flex-col justify-between rounded-[3px] bg-[#f5f5f3] p-4 sm:p-6 md:p-7`}
       >
         <div>
           <h3 className="text-[14px] font-normal sm:text-[15px]">
             70+ industry-recognized
           </h3>
+
           <p className="text-[12px] text-black/50 sm:text-[13px]">awards.</p>
         </div>
+
         <RotatingLogos logos={awardLogos} />
       </div>
     </>
   );
 
+  // =====================================
+  // MAIN JSX
+  // =====================================
+
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-white text-black">
-      <header className="flex min-h-[68px] w-full flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-black/15 bg-white px-4 py-3 sm:h-[75px] sm:flex-nowrap sm:px-6 md:px-8">
-        <h2 className="text-[14px] font-light tracking-tight sm:text-[16px]">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen w-full overflow-hidden bg-white text-black font-[Satoshi]"
+    >
+      {/* HEADER */}
+
+      <header className="mx-5 flex h-[70px] items-center justify-between border-t border-black/25 px-0 font-[Satoshi] sm:mx-6 md:mx-6">
+        <h2 className="text-[16px] font-light tracking-tight sm:text-[18px]">
           Rejouice at a Glance.
         </h2>
 
         <a
           href="mailto:hello@rejouice.com"
-          className="text-[11px] font-normal sm:text-[13px]"
+          className="text-[14px] font-normal sm:text-[16px]"
         >
           hello@rejouice.com
         </a>
       </header>
+
+      {/* HORIZONTAL SCROLL CONTAINER */}
 
       <div
         className="w-full overflow-hidden pt-5 sm:pt-8"
@@ -480,9 +684,13 @@ const ProjectShowcase: React.FC = () => {
           ref={trackRef}
           className="flex w-max min-w-max shrink-0 flex-nowrap items-start"
         >
+          {/* FIRST SET OF CARDS */}
+
           <div className="flex w-max shrink-0 flex-nowrap items-start gap-3 pr-3 sm:gap-4 sm:pr-4 md:gap-5 md:pr-5">
             {cards}
           </div>
+
+          {/* DUPLICATE SET FOR INFINITE SCROLL */}
 
           <div
             aria-hidden="true"
@@ -493,12 +701,15 @@ const ProjectShowcase: React.FC = () => {
         </div>
       </div>
 
+      {/* CSS ANIMATIONS */}
+
       <style jsx global>{`
         @keyframes logoFade {
           from {
             opacity: 0;
             transform: translateY(5px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -510,6 +721,7 @@ const ProjectShowcase: React.FC = () => {
             opacity: 0;
             transform: translateY(8px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
@@ -521,4 +733,3 @@ const ProjectShowcase: React.FC = () => {
 };
 
 export default ProjectShowcase;
-

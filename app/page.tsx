@@ -1,7 +1,7 @@
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
@@ -23,23 +23,33 @@ const Home: React.FC = () => {
     setIsLoading(false);
   };
 
+  // Refresh ScrollTrigger after loader finishes
+  useEffect(() => {
+    if (!isLoading) {
+      const refreshId = requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+
+      return () => cancelAnimationFrame(refreshId);
+    }
+  }, [isLoading]);
+
   return (
-    <div className="min-h-screen overflow-hidden bg-[#000000]">
-      {isLoading && (
-        <Loader onLoadingComplete={handleLoadingComplete} />
-      )}
+    <div className="min-h-screen overflow-hidden bg-black">
+      {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
 
       <div className={`${isLoading ? "hidden" : "block"} min-h-screen`}>
         <Navbar />
+
         <Page1 />
         <Page2 />
         <PageAbout />
         <PageHighlights />
+
         <LogoScroll />
         <ProjectShowcase />
         <OurApproach />
 
-        {/* Portfolio video section */}
         <PORTFOLIO src="/assets/PORTFOLIO.mp4" />
 
         <About />

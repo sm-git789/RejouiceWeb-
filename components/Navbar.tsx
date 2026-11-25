@@ -4,8 +4,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-
-
 interface NavItemsProps {
   children: React.ReactNode;
   href: string;

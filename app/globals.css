@@ -31,6 +31,14 @@ html.lenis body {
   pointer-events: none;
 }
 
+
+/* Hide navbar when fullscreen reel is open */
+body.reel-open nav {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
 /* 
 .drag-cursor {
   position: fixed;

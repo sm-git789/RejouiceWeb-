@@ -9,7 +9,7 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "StudioSize",
+  title: "REJOUICE",
   description: "StudioSize is a free and open source platform for creating and sharing studio logos.",
 };
 
