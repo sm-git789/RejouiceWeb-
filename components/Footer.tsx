@@ -21,6 +21,10 @@ const Footer: React.FC = () => {
 
       if (!content || !letters.length) return;
 
+      gsap.set(letters, {
+        y: -180,
+      });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footer,
@@ -31,10 +35,8 @@ const Footer: React.FC = () => {
         },
       });
 
-      // Footer content animation
-      tl.fromTo(
+      tl.to(
         content,
-        { y: -180 },
         {
           y: 0,
           duration: 1,
@@ -43,19 +45,15 @@ const Footer: React.FC = () => {
         0,
       );
 
-      // Each REJOUICE letter falls down
-      tl.fromTo(
+      tl.to(
         letters,
-        {
-          y: (index) => -120 - index * 15,
-        },
         {
           y: 0,
           duration: 1,
-          stagger: 0.06,
+          stagger: 0.12,
           ease: "none",
         },
-        0.5,
+        0,
       );
 
       return () => {
@@ -186,17 +184,13 @@ const Footer: React.FC = () => {
 
         {/* FOOTER WORDMARK */}
 
-        {/* FOOTER WORDMARK */}
-
-        {/* FOOTER WORDMARK */}
-
         <div className="mt-[clamp(90px,16vh,150px)] -mx-2 w-full md:-mx-[1vw]">
           <div className="w-full overflow-hidden">
             <h1
               className="
         footer-wordmark
         block w-full
-        px-0
+        px-1 sm:px-[2vw]
         text-center
         font-[Satoshi]
         text-[19vw]
@@ -208,13 +202,16 @@ const Footer: React.FC = () => {
         whitespace-nowrap
         select-none
         text-white
-        will-change-transform
       "
               aria-label="REJOUICE"
             >
               {"REJOUICE".split("").map((letter, index) => (
-                <span key={index} className="inline-block" aria-hidden="true">
-                  {letter}
+                <span
+                  key={index}
+                  className="footer-letter inline-block will-change-transform"
+                  aria-hidden="true"
+                >
+                  {letter === "U" ? <u className="no-underline">U</u> : letter}
                 </span>
               ))}
             </h1>
