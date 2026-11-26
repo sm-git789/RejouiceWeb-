@@ -1,7 +1,143 @@
+// "use client";
+
+// import React, { useLayoutEffect, useRef } from "react";
+// import gsap from "gsap";
+
+// interface LoaderProps {
+//   children?: React.ReactNode;
+//   onLoadingComplete: () => void;
+// }
+
+// const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
+//   const loaderRef = useRef<HTMLDivElement>(null);
+//   const pageRef = useRef<HTMLDivElement>(null);
+//   const wordRefs = useRef<HTMLSpanElement[]>([]);
+//   const callbackRef = useRef(onLoadingComplete);
+
+//   React.useEffect(() => {
+//     callbackRef.current = onLoadingComplete;
+//   }, [onLoadingComplete]);
+
+//   useLayoutEffect(() => {
+//     const loader = loaderRef.current;
+//     const page = pageRef.current;
+
+//     if (!loader || !page) return;
+
+//     const ctx = gsap.context(() => {
+//       // Initial loader visibility
+//       gsap.set(loader, {
+//         autoAlpha: 1,
+//       });
+
+//       // Keep the complete website above the viewport
+//       gsap.set(page, {
+//         y: -window.innerHeight,
+//         force3D: true,
+//       });
+
+//       const tl = gsap.timeline({
+//         onComplete: () => {
+//           gsap.set(page, {
+//             clearProps: "transform",
+//           });
+
+//           callbackRef.current?.();
+//         },
+//       });
+
+//       // Loader text animation
+//       tl.fromTo(
+//         wordRefs.current,
+//         {
+//           yPercent: 110,
+//           opacity: 0,
+//         },
+//         {
+//           yPercent: 0,
+//           opacity: 1,
+//           duration: 0.8,
+//           stagger: 0.22,
+//           ease: "power3.out",
+//         },
+//       );
+
+//       // Hold loader
+//       tl.to(
+//         {},
+//         {
+//           duration: 0.7,
+//         },
+//       );
+
+//       // Website comes down smoothly
+//       tl.to(
+//         page,
+//         {
+//           y: 0,
+//           duration: 1.8,
+//           ease: "power3.out",
+//           force3D: true,
+//         },
+//         "<",
+//       );
+
+//       // Fade out loader while website comes down
+//       tl.to(
+//         loader,
+//         {
+//           autoAlpha: 0,
+//           duration: 0.5,
+//           ease: "power2.out",
+//         },
+//         "<",
+//       );
+//     });
+
+//     return () => ctx.revert();
+//   }, []);
+
+//   const words = ["Tomorrow's", "Brands,", "Today."];
+
+//   return (
+//     <div className="relative min-h-screen w-full bg-white">
+//       {/* WHITE LOADER */}
+//       <div
+//         ref={loaderRef}
+//         className="fixed inset-0 z-[10002] flex items-center justify-center bg-white"
+//       >
+//         <div className="flex items-baseline justify-center gap-2 whitespace-nowrap px-4 font-[Satoshi] text-[clamp(17px,2vw,30px)] font-light tracking-[-0.035em] text-black">
+//           {words.map((word, index) => (
+//             <span key={word} className="inline-block overflow-hidden">
+//               <span
+//                 ref={(el) => {
+//                   if (el) wordRefs.current[index] = el;
+//                 }}
+//                 className="inline-block"
+//               >
+//                 {word}
+//               </span>
+//             </span>
+//           ))}
+
+//           <sup className="self-start text-[9px] font-normal">TM</sup>
+//         </div>
+//       </div>
+
+//       {/* COMPLETE WEBSITE */}
+//       <div ref={pageRef} className="relative min-h-screen w-full">
+//         {children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Loader;
+
 "use client";
 
 import React, { useLayoutEffect, useRef } from "react";
-import { gsap } from "gsap";
+import gsap from "gsap";
 
 interface LoaderProps {
   children?: React.ReactNode;
@@ -25,24 +161,28 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
     if (!loader || !page) return;
 
     const ctx = gsap.context(() => {
-      // Place the complete website above the viewport
-      gsap.set(page, {
-        y: () => -window.innerHeight,
-        force3D: true,
-      });
-
-      // Keep loader visible
+      // Initial loader visibility
       gsap.set(loader, {
         autoAlpha: 1,
       });
 
+      // Keep the complete website above the viewport
+      gsap.set(page, {
+        y: -window.innerHeight,
+        force3D: true,
+      });
+
       const tl = gsap.timeline({
         onComplete: () => {
+          gsap.set(page, {
+            clearProps: "transform",
+          });
+
           callbackRef.current?.();
         },
       });
 
-      // 1. Loader text animation
+      // Loader text animation
       tl.fromTo(
         wordRefs.current,
         {
@@ -58,23 +198,60 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       );
 
-      // 2. Pause
-      tl.to({}, { duration: 0.7 });
+      // Hold loader
+      tl.to(
+        {},
+        {
+          duration: 0.7,
+        },
+      );
 
-      // 3. Hide loader
-      tl.to(loader, {
-        autoAlpha: 0,
-        duration: 0.4,
-        ease: "power2.inOut",
-      });
+      // Get individual REJOUICE letters
+      const heroLetters =
+        page.querySelectorAll<HTMLElement>("[data-hero-letter]");
 
-      // 4. Drop the COMPLETE website into view
-      tl.to(page, {
-        y: 0,
-        duration: 1.8,
-        ease: "power4.inOut",
-        force3D: true,
-      });
+      // COMPLETE WEBSITE FALLS DOWN
+      tl.to(
+        page,
+        {
+          y: 0,
+          duration: 1.8,
+          ease: "power3.out",
+          force3D: true,
+        },
+        "<",
+      );
+
+      // REJOUICE LETTERS FALL ONE BY ONE
+      if (heroLetters.length) {
+        tl.fromTo(
+          heroLetters,
+          {
+            yPercent: -120,
+            opacity: 0,
+          },
+          {
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.09,
+            ease: "power3.out",
+            clearProps: "transform,opacity",
+          },
+          "<0.1",
+        );
+      }
+
+      // Fade out loader while website comes down
+      tl.to(
+        loader,
+        {
+          autoAlpha: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        "<",
+      );
     });
 
     return () => ctx.revert();
@@ -83,28 +260,13 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
   const words = ["Tomorrow's", "Brands,", "Today."];
 
   return (
-    // IMPORTANT: Outer wrapper is WHITE, not black
-    <div className="relative min-h-screen overflow-hidden bg-white">
+    <div className="relative min-h-screen w-full bg-white">
       {/* WHITE LOADER */}
       <div
         ref={loaderRef}
-        className="
-          fixed inset-0
-          z-[10002]
-          flex items-center justify-center
-          bg-white
-        "
+        className="fixed inset-0 z-[10002] flex items-center justify-center bg-white"
       >
-        <div
-          className="
-            flex items-baseline justify-center
-            gap-2 whitespace-nowrap px-4
-            font-[Satoshi]
-            text-[clamp(17px,2vw,30px)]
-            font-light tracking-[-0.035em]
-            text-black
-          "
-        >
+        <div className="flex items-baseline justify-center gap-2 whitespace-nowrap px-4 font-[Satoshi] text-[clamp(17px,2vw,30px)] font-light tracking-[-0.035em] text-black">
           {words.map((word, index) => (
             <span key={word} className="inline-block overflow-hidden">
               <span
@@ -122,21 +284,8 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         </div>
       </div>
 
-      {/* ENTIRE WEBSITE MOVES AS ONE UNIT */}
-      <div
-        ref={pageRef}
-        className="
-          fixed inset-0
-          z-[10001]
-          h-screen
-          overflow-y-auto
-          bg-black
-          text-white
-        "
-        style={{
-          willChange: "transform",
-        }}
-      >
+      {/* COMPLETE WEBSITE */}
+      <div ref={pageRef} className="relative min-h-screen w-full">
         {children}
       </div>
     </div>

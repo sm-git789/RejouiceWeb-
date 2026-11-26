@@ -15,8 +15,11 @@ const Footer: React.FC = () => {
 
     const mm = gsap.matchMedia();
 
-    // Animation only on desktop and tablet
+    // DESKTOP AND TABLET ONLY
     mm.add("(min-width: 768px)", () => {
+      const content = footer.querySelector(".footer-content");
+      const wordmark = footer.querySelector(".footer-wordmark");
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footer,
@@ -27,26 +30,33 @@ const Footer: React.FC = () => {
         },
       });
 
+      // STEP 1: FOOTER CONTENT MOVES INTO POSITION
       tl.fromTo(
-        ".footer-content",
-        { y: -180 },
+        content,
+        {
+          y: -180,
+        },
         {
           y: 0,
+          duration: 1,
           ease: "none",
         },
         0,
       );
 
+      // STEP 2: COMPLETE REJOUICE HEADING FALLS DOWN
+      // Starts after the footer content animation.
       tl.fromTo(
-        ".footer-wordmark",
+        wordmark,
         {
-          yPercent: -110,
+          y: () => -wordmark.offsetHeight * 1.5,
         },
         {
-          yPercent: 0,
+          y: 0,
+          duration: 0.8,
           ease: "none",
         },
-        0,
+        1,
       );
 
       return () => {
@@ -61,15 +71,15 @@ const Footer: React.FC = () => {
   return (
     <footer
       ref={footerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-black text-white"
+      className="relative w-full overflow-x-clip overflow-y-visible bg-black text-white"
       style={{
         fontFamily: "'Satoshi', sans-serif",
       }}
     >
-      <div className="flex min-h-screen flex-col px-6 pt-8 md:px-[2.6vw] md:pt-10">
+      <div className="flex flex-col px-5 pt-5 pb-0 md:px-[2.6vw] md:pt-6">
         {/* LEFT AND RIGHT CONTENT */}
 
-        <div className="footer-content grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-0">
+        <div className="footer-content grid grid-cols-1 gap-7 md:grid-cols-12 md:gap-0">
           {/* LEFT CONTENT */}
 
           <div className="md:col-span-7">
@@ -170,30 +180,40 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-auto w-full overflow-hidden pt-16">
-          <h1
-            className="
-      footer-wordmark
-      w-full
-      px-2 sm:px-[2vw]
-      text-center
-      font-[Satoshi]
-      text-[19vw]
-      sm:text-[20vw]
-      md:text-[20.5vw]
-      font-black
-      leading-[0.85]
-      sm:leading-[0.78]
-      tracking-[-0.075em]
-      whitespace-nowrap
-      select-none
-      text-white
-      will-change-transform
-    "
-            aria-label="REJOUICE"
+        {/* FOOTER WORDMARK */}
+
+        <div className="mt-[clamp(90px,16vh,150px)] w-full -mx-2 md:-mx-[1vw] pt-2 pb-0 md:pt-4">
+          <div
+            className="w-full overflow-hidden py-[0.50em]"
+            style={{ perspective: "1000px" }}
           >
-            REJOUICE
-          </h1>
+            <h1
+              className="
+    footer-wordmark
+    block w-full
+    px-0
+    text-center
+    font-[Satoshi]
+    text-[19vw]
+    sm:text-[20vw]
+    md:text-[20.5vw]
+    font-black
+    leading-[1.1]
+    tracking-[-0.075em]
+    whitespace-nowrap
+    select-none
+    text-white
+    will-change-transform
+  "
+              aria-label="REJOUICE"
+            >
+              {"REJOUICE".split("").map((letter, index) => (
+                <span key={index} className="inline-block" aria-hidden="true">
+                  {letter}
+                </span>
+              ))}
+            </h1>
+          </div>
         </div>
       </div>
     </footer>

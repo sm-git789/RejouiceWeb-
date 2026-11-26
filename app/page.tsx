@@ -35,13 +35,13 @@ const Home: React.FC = () => {
   }, [isLoading]);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-black">
-      {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
-
-      <div className={`${isLoading ? "hidden" : "block"} min-h-screen`}>
+    <Loader onLoadingComplete={handleLoadingComplete}>
+      <main className="min-h-screen overflow-hidden bg-black text-white">
         <Navbar />
 
+        {/* HERO SECTION */}
         <Page1 />
+
         <Page2 />
         <PageAbout />
         <PageHighlights />
@@ -54,8 +54,8 @@ const Home: React.FC = () => {
 
         <About />
         <Footer />
-      </div>
-    </div>
+      </main>
+    </Loader>
   );
 };
 
