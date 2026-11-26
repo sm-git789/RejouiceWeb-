@@ -654,7 +654,7 @@ const ProjectShowcase: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-white text-black font-[Satoshi]"
+      className="relative h-auto min-h-0 w-full overflow-hidden bg-white text-black font-[Satoshi] md:min-h-screen"
     >
       {/* HEADER */}
 
@@ -674,7 +674,7 @@ const ProjectShowcase: React.FC = () => {
       {/* HORIZONTAL SCROLL CONTAINER */}
 
       <div
-        className="w-full overflow-hidden pt-5 sm:pt-8"
+        className="w-full overflow-hidden pt-3 pb-2 sm:pt-8 sm:pb-4"
         onMouseEnter={pauseAnimation}
         onMouseLeave={resumeAnimation}
         onTouchStart={pauseAnimation}

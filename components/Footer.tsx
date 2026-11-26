@@ -13,7 +13,10 @@ const Footer: React.FC = () => {
     const footer = footerRef.current;
     if (!footer) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // Animation only on desktop and tablet
+    mm.add("(min-width: 768px)", () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footer,
@@ -24,7 +27,6 @@ const Footer: React.FC = () => {
         },
       });
 
-      // Footer content movement
       tl.fromTo(
         ".footer-content",
         { y: -180 },
@@ -46,9 +48,14 @@ const Footer: React.FC = () => {
         },
         0,
       );
-    }, footer);
 
-    return () => ctx.revert();
+      return () => {
+        tl.scrollTrigger?.kill();
+        tl.kill();
+      };
+    });
+
+    return () => mm.revert();
   }, []);
 
   return (

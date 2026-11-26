@@ -135,13 +135,13 @@ const About: React.FC = () => {
   };
 
   return (
-    <section className="flex min-h-[70vh] w-full items-center justify-center bg-white">
+    <section className="flex min-h-[34vh] w-full items-center justify-center bg-white py-12 md:min-h-[70vh] md:py-0">
       <a
         href="/about"
         aria-label="About Us"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="inline-block cursor-pointer font-[Satoshi] text-[42px] font-light tracking-[-0.045em] text-black md:text-[64px]"
+        className="inline-block cursor-pointer font-[Satoshi] text-[32px] font-light tracking-[-0.045em] text-black md:text-[64px]"
       >
         <span className="grid w-max overflow-hidden leading-[1.15]">
           <span
@@ -156,7 +156,6 @@ const About: React.FC = () => {
             />
           </span>
 
-          {/* GET TO KNOW US */}
           <span
             ref={knowRef}
             aria-hidden="true"

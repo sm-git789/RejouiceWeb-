@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -20,38 +19,6 @@ const NavItem: React.FC<NavItemsProps> = ({
   const itemRef = useRef<HTMLAnchorElement>(null);
   const underlineRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    const item = itemRef.current;
-    const underline = underlineRef.current;
-
-    if (!item || !underline) return;
-
-    const handleMouseEnter = () => {
-      gsap.to(underline, {
-        width: "100%",
-        duration: 0.35,
-        ease: "power2.out",
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(underline, {
-        width: "0%",
-        duration: 0.3,
-        ease: "power2.inOut",
-      });
-    };
-
-    item.addEventListener("mouseenter", handleMouseEnter);
-    item.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      item.removeEventListener("mouseenter", handleMouseEnter);
-      item.removeEventListener("mouseleave", handleMouseLeave);
-      gsap.killTweensOf(underline);
-    };
-  }, []);
-
   return (
     <a
       ref={itemRef}
@@ -65,7 +32,7 @@ const NavItem: React.FC<NavItemsProps> = ({
 
       <span
         ref={underlineRef}
-        className={`absolute bottom-1 left-0 h-[1px] w-0 transition-colors duration-300 ${
+        className={`absolute bottom-1 left-0 h-[1px] w-0 ${
           isLight ? "bg-black" : "bg-white"
         }`}
       />
@@ -73,40 +40,33 @@ const NavItem: React.FC<NavItemsProps> = ({
   );
 };
 
-
-
 const Navbar: React.FC = () => {
   const [isLight, setIsLight] = useState(false);
+  const [isHome, setIsHome] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navigation = [
-    { title: "Home", href: "#home" },
-    { title: "Work", href: "#work" },
-    { title: "About", href: "#about" },
-    { title: "Services", href: "#services" },
-    { title: "Contact", href: "#contact" },
-  ];
-
-
+  // Detect active section and update navbar theme
   useEffect(() => {
     const updateNavbarColor = () => {
-      const sections = document.querySelectorAll<HTMLElement>(
-        "[data-navbar-theme]"
-      );
-
       const navbarY = 32;
 
-      let currentTheme = "dark";
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-navbar-theme]"),
+      );
 
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
+      const activeSection = sections
+        .filter((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= navbarY && rect.bottom > navbarY;
+        })
+        .sort((a, b) => {
+          return b.getBoundingClientRect().top - a.getBoundingClientRect().top;
+        })[0];
 
-        if (rect.top <= navbarY && rect.bottom > navbarY) {
-          currentTheme = section.dataset.navbarTheme || "dark";
-        }
-      });
+      const currentTheme = activeSection?.dataset.navbarTheme || "dark";
 
       setIsLight(currentTheme === "light");
+      setIsHome(activeSection?.id === "home");
     };
 
     updateNavbarColor();
@@ -123,50 +83,58 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  const navigation = [
+    { title: "Home", href: "#home" },
+    { title: "Work", href: "#work" },
+    { title: "About", href: "#about" },
+    { title: "Services", href: "#services" },
+    { title: "Contact", href: "#contact" },
+  ];
+
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
+  // Menu overlay is always black, so keep its controls white.
+  const navbarTextColor = isMenuOpen || !isLight ? "text-white" : "text-black";
+
   return (
     <nav
-      className="fixed top-0 left-0 z-[9999] w-full bg-transparent font-[Satoshi]"
+      className="fixed left-0 top-0 z-[9999] w-full bg-transparent font-[Satoshi]"
       style={{
         fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
       }}
     >
-   
-
-      <div className="relative z-[60] grid h-[65px] w-full grid-cols-3 items-center px-5 md:px-8">
-
-    
-
-        <div className="justify-self-start">
+      {/* Navbar */}
+      <div className="relative z-[60] flex h-[65px] w-full items-center justify-between px-5 md:grid md:grid-cols-3 md:px-8">
+        {/* Logo */}
+        <div className="shrink-0 justify-self-start">
           <a
             href="#home"
-            className={`text-[24px] font-light tracking-[-0.07em] transition-colors duration-300 md:text-[27px] ${
-              isLight ? "text-black" : "text-white"
-            }`}
+            className={`transition-colors duration-300 ${navbarTextColor}`}
           >
-            rejo<u className="no-underline">u</u>ice
+            {isHome ? (
+              <span className="text-[13px] font-medium tracking-[-0.04em] md:text-[15px]">
+                The Growth Accelerator
+              </span>
+            ) : (
+              <span className="text-[24px] font-light tracking-[-0.07em] md:text-[27px]">
+                rejo<u className="no-underline">u</u>ice
+              </span>
+            )}
           </a>
         </div>
 
-       
-
+        {/* Desktop Navigation */}
         <div className="hidden items-center justify-center gap-5 md:flex lg:gap-7">
           {navigation.map((item) => (
-            <NavItem
-              key={item.title}
-              href={item.href}
-              isLight={isLight}
-            >
+            <NavItem key={item.title} href={item.href} isLight={isLight}>
               {item.title}
             </NavItem>
           ))}
         </div>
 
-        
-
+        {/* Desktop Let's Talk */}
         <div className="hidden justify-self-end md:block">
           <a
             href="#contact"
@@ -174,27 +142,25 @@ const Navbar: React.FC = () => {
               isLight ? "text-black" : "text-white"
             }`}
           >
-            Let&apos;s talk ↗
+            Let's talk ↗
           </a>
         </div>
 
-       
-
-        <button
-          type="button"
-          className={`col-start-3 justify-self-end text-[23px] font-light transition-colors duration-300 focus:outline-none md:hidden ${
-            isLight ? "text-black" : "text-white"
-          }`}
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
-        >
-          {isMenuOpen ? "×" : "☰"}
-        </button>
+        {/* Mobile Menu Button */}
+        <div className="ml-auto md:hidden">
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-expanded={isMenuOpen}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className={`border border-current/20 px-4 py-2 font-[Satoshi] text-[13px] font-medium transition-colors duration-300 ${navbarTextColor}`}
+          >
+            {isMenuOpen ? "Close" : "Menu"}
+          </button>
+        </div>
       </div>
 
-      
-
+      {/* Mobile Fullscreen Menu */}
       <div
         className="fixed left-0 top-0 z-50 w-full overflow-hidden bg-black transition-[height] duration-500 ease-in-out md:hidden"
         style={{
@@ -222,7 +188,7 @@ const Navbar: React.FC = () => {
             onClick={closeMenu}
             className="mt-5 text-[15px] font-light text-white"
           >
-            Let&apos;s talk ↗
+            Let's talk ↗
           </a>
         </div>
       </div>

@@ -7,6 +7,7 @@ interface LoaderProps {
   children?: React.ReactNode;
   onLoadingComplete: () => void;
 }
+
 const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
   const loaderRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -24,15 +25,14 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
     if (!loader || !page) return;
 
     const ctx = gsap.context(() => {
-      // Website starts above the viewport.
+      // Place the complete website above the viewport
       gsap.set(page, {
-        y: "-100%",
+        y: () => -window.innerHeight,
         force3D: true,
       });
 
-      // Loader starts visible.
+      // Keep loader visible
       gsap.set(loader, {
-        y: "0%",
         autoAlpha: 1,
       });
 
@@ -42,7 +42,7 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       });
 
-      // 1. Animate loading text.
+      // 1. Loader text animation
       tl.fromTo(
         wordRefs.current,
         {
@@ -58,24 +58,22 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       );
 
-      // 2. Small pause.
-      tl.to(
-        {},
-        {
-          duration: 0.7,
-        },
-      );
+      // 2. Pause
+      tl.to({}, { duration: 0.7 });
 
-      // 3. Website drops down from the top.
-      tl.to(page, {
-        y: "0%",
-        duration: 1.5,
-        ease: "power4.inOut",
+      // 3. Hide loader
+      tl.to(loader, {
+        autoAlpha: 0,
+        duration: 0.4,
+        ease: "power2.inOut",
       });
 
-      // 4. Remove loader after the website covers it.
-      tl.set(loader, {
-        autoAlpha: 0,
+      // 4. Drop the COMPLETE website into view
+      tl.to(page, {
+        y: 0,
+        duration: 1.8,
+        ease: "power4.inOut",
+        force3D: true,
       });
     });
 
@@ -85,13 +83,28 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
   const words = ["Tomorrow's", "Brands,", "Today."];
 
   return (
+    // IMPORTANT: Outer wrapper is WHITE, not black
     <div className="relative min-h-screen overflow-hidden bg-white">
-      {/* LOADING SCREEN */}
+      {/* WHITE LOADER */}
       <div
         ref={loaderRef}
-        className="fixed inset-0 z-[10000] flex items-center justify-center bg-white"
+        className="
+          fixed inset-0
+          z-[10002]
+          flex items-center justify-center
+          bg-white
+        "
       >
-        <div className="flex items-baseline justify-center gap-2 whitespace-nowrap px-4 font-[Satoshi] text-[clamp(17px,2vw,30px)] font-light tracking-[-0.035em] text-black">
+        <div
+          className="
+            flex items-baseline justify-center
+            gap-2 whitespace-nowrap px-4
+            font-[Satoshi]
+            text-[clamp(17px,2vw,30px)]
+            font-light tracking-[-0.035em]
+            text-black
+          "
+        >
           {words.map((word, index) => (
             <span key={word} className="inline-block overflow-hidden">
               <span
@@ -109,10 +122,17 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         </div>
       </div>
 
-      {/* WEBSITE DROPS DOWN */}
+      {/* ENTIRE WEBSITE MOVES AS ONE UNIT */}
       <div
         ref={pageRef}
-        className="fixed inset-0 z-[10001] h-screen overflow-y-auto bg-black text-white"
+        className="
+          fixed inset-0
+          z-[10001]
+          h-screen
+          overflow-y-auto
+          bg-black
+          text-white
+        "
         style={{
           willChange: "transform",
         }}

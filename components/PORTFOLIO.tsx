@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useLayoutEffect, useRef } from "react";
@@ -12,10 +11,7 @@ interface ScrollVideoProps {
   poster?: string;
 }
 
-const PORTFOLIO: React.FC<ScrollVideoProps> = ({
-  src,
-  poster,
-}) => {
+const PORTFOLIO: React.FC<ScrollVideoProps> = ({ src, poster }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +37,7 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
             scrub: 1,
             invalidateOnRefresh: true,
           },
-        }
+        },
       );
     }, section);
 
@@ -53,9 +49,9 @@ const PORTFOLIO: React.FC<ScrollVideoProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-white py-20 md:py-28"
+      className="relative w-full overflow-hidden bg-white py-4 md:py-28"
     >
-      <div className="mx-auto w-full px-6 md:px-12">
+      <div className="mx-auto w-full px-4 md:px-12">
         <div
           ref={videoRef}
           className="relative mx-auto aspect-[16/9] w-full overflow-hidden will-change-transform"
