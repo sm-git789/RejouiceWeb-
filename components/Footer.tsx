@@ -15,13 +15,11 @@ const Footer: React.FC = () => {
 
     const mm = gsap.matchMedia();
 
-    // DESKTOP AND TABLET ONLY
     mm.add("(min-width: 768px)", () => {
-      const content = footer.querySelector<HTMLElement>(".footer-content");
-      const wordmark = footer.querySelector<HTMLElement>(".footer-wordmark");
+      const content = footer.querySelector(".footer-content");
+      const letters = footer.querySelectorAll(".footer-letter");
 
-      // Check whether both elements exist
-      if (!content || !wordmark) return;
+      if (!content || !letters.length) return;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -33,12 +31,10 @@ const Footer: React.FC = () => {
         },
       });
 
-      // STEP 1: FOOTER CONTENT MOVES INTO POSITION
+      // Footer content animation
       tl.fromTo(
         content,
-        {
-          y: -180,
-        },
+        { y: -180 },
         {
           y: 0,
           duration: 1,
@@ -47,18 +43,19 @@ const Footer: React.FC = () => {
         0,
       );
 
-      // STEP 2: COMPLETE REJOUICE HEADING FALLS DOWN
+      // Each REJOUICE letter falls down
       tl.fromTo(
-        wordmark,
+        letters,
         {
-          y: () => -wordmark.offsetHeight * 1.5,
+          y: (index) => -120 - index * 15,
         },
         {
           y: 0,
-          duration: 0.8,
+          duration: 1,
+          stagger: 0.06,
           ease: "none",
         },
-        1,
+        0.5,
       );
 
       return () => {
@@ -189,29 +186,30 @@ const Footer: React.FC = () => {
 
         {/* FOOTER WORDMARK */}
 
-        <div className="mt-[clamp(90px,16vh,150px)] -mx-2 w-full pt-2 pb-0 md:-mx-[1vw] md:pt-4">
-          <div
-            className="w-full overflow-hidden py-[0.50em]"
-            style={{ perspective: "1000px" }}
-          >
+        {/* FOOTER WORDMARK */}
+
+        {/* FOOTER WORDMARK */}
+
+        <div className="mt-[clamp(90px,16vh,150px)] -mx-2 w-full md:-mx-[1vw]">
+          <div className="w-full overflow-hidden">
             <h1
               className="
-                footer-wordmark
-                block w-full
-                px-0
-                text-center
-                font-[Satoshi]
-                text-[19vw]
-                sm:text-[20vw]
-                md:text-[20.5vw]
-                font-black
-                leading-[1.1]
-                tracking-[-0.075em]
-                whitespace-nowrap
-                select-none
-                text-white
-                will-change-transform
-              "
+        footer-wordmark
+        block w-full
+        px-0
+        text-center
+        font-[Satoshi]
+        text-[19vw]
+        sm:text-[20vw]
+        md:text-[20.5vw]
+        font-black
+        leading-[1.15]
+        tracking-[-0.075em]
+        whitespace-nowrap
+        select-none
+        text-white
+        will-change-transform
+      "
               aria-label="REJOUICE"
             >
               {"REJOUICE".split("").map((letter, index) => (
