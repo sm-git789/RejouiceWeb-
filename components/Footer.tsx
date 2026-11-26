@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useLayoutEffect, useRef } from "react";
@@ -15,42 +14,37 @@ const Footer: React.FC = () => {
     if (!footer) return;
 
     const ctx = gsap.context(() => {
-      
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footer,
-          start: "top 90%",
-          end: "top 10%",
+          start: "top bottom",
+          end: "top top",
           scrub: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      
+      // Footer content movement
       tl.fromTo(
-        ".footer-reveal",
-        {
-          y: 45,
-          opacity: 0,
-        },
+        ".footer-content",
+        { y: -180 },
         {
           y: 0,
-          opacity: 1,
-          stagger: 0.08,
           ease: "none",
         },
-        0
+        0,
       );
+
       tl.fromTo(
         ".footer-wordmark",
         {
-          yPercent: 85,
+          yPercent: -110,
         },
         {
           yPercent: 0,
           ease: "none",
         },
-        0.15
+        0,
       );
     }, footer);
 
@@ -65,25 +59,18 @@ const Footer: React.FC = () => {
         fontFamily: "'Satoshi', sans-serif",
       }}
     >
-     
       <div className="flex min-h-screen flex-col px-6 pt-8 md:px-[2.6vw] md:pt-10">
+        {/* LEFT AND RIGHT CONTENT */}
 
-      
-
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-0">
-
-          
+        <div className="footer-content grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-0">
+          {/* LEFT CONTENT */}
 
           <div className="md:col-span-7">
-
-           
-            <h2 className="footer-reveal text-[26px] font-light tracking-[-0.045em] md:text-[32px]">
+            <h2 className="text-[26px] font-light tracking-[-0.045em] md:text-[32px]">
               Do it once. Do it right.
             </h2>
 
-            
-
-            <div className="footer-reveal mt-10 text-[12px] font-light leading-[1.3] text-white/90">
+            <div className="mt-10 text-[12px] font-light leading-[1.3]">
               <p>New Business:</p>
 
               <a
@@ -94,10 +81,7 @@ const Footer: React.FC = () => {
               </a>
             </div>
 
-            
-
-            <div className="footer-reveal mt-8 max-w-[290px]">
-
+            <div className="mt-8 max-w-[290px]">
               <p className="mb-4 text-[12px] font-light">
                 Sign up for our newsletter (No spam)
               </p>
@@ -116,43 +100,41 @@ const Footer: React.FC = () => {
                 <button
                   type="submit"
                   aria-label="Submit email"
-                  className="text-[17px] font-light text-white/70 transition-opacity hover:opacity-50"
+                  className="text-[17px] font-light text-white transition-opacity hover:opacity-50"
                 >
                   →
                 </button>
               </form>
-
             </div>
-
           </div>
 
-         
-          <div className="grid grid-cols-2 gap-2 text-[12px] font-light leading-[1.5] md:col-span-5 md:grid-cols-2 md:translate-x-48">
-         
+          {/* RIGHT CONTENT */}
 
-          
-
-            <div className="footer-reveal flex flex-col items-start gap-[2px]">
-
-              <a href="#home" className="hover:opacity-50">Home</a>
-              <a href="#work" className="hover:opacity-50">Work</a>
-              <a href="#about" className="hover:opacity-50">About</a>
-              <a href="#services" className="hover:opacity-50">Services</a>
-              <a href="#contact" className="hover:opacity-50">Contact</a>
-
-             
+          <div className="grid grid-cols-2 gap-2 text-[12px] font-light leading-[1.5] md:col-span-5 md:translate-x-48">
+            <div className="flex flex-col items-start gap-[2px]">
+              <a href="#home" className="hover:opacity-50">
+                Home
+              </a>
+              <a href="#work" className="hover:opacity-50">
+                Work
+              </a>
+              <a href="#about" className="hover:opacity-50">
+                About
+              </a>
+              <a href="#services" className="hover:opacity-50">
+                Services
+              </a>
+              <a href="#contact" className="hover:opacity-50">
+                Contact
+              </a>
 
               <div className="mt-16 leading-[1.2]">
                 <p>San Diego—USA</p>
                 <p>Paris—France</p>
               </div>
-
             </div>
 
-            
-
-            <div className="footer-reveal flex flex-col items-start gap-[2px]">
-
+            <div className="flex flex-col items-start gap-[2px]">
               <a
                 href="https://www.instagram.com/"
                 target="_blank"
@@ -171,32 +153,19 @@ const Footer: React.FC = () => {
                 LinkedIn ↗
               </a>
 
-             
-
               <div className="mt-16 leading-[1.2]">
                 <a href="#terms" className="hover:opacity-50">
                   Terms of use
                 </a>
-
                 <p>©13—26</p>
               </div>
-
             </div>
-
           </div>
         </div>
 
-        
-
         <div className="mt-auto w-full overflow-hidden pt-16">
-
-       
-
-
-<div className="mt-auto w-full overflow-hidden pt-12 sm:pt-16">
-
-  <h1
-    className="
+          <h1
+            className="
       footer-wordmark
       w-full
       px-2 sm:px-[2vw]
@@ -212,21 +181,16 @@ const Footer: React.FC = () => {
       whitespace-nowrap
       select-none
       text-white
+      will-change-transform
     "
-    aria-label="REJOUICE"
-  >
-    REJO<u className="no-underline">U</u>ICE
-  </h1>
-
-</div>
-
-
+            aria-label="REJOUICE"
+          >
+            REJOUICE
+          </h1>
         </div>
-
       </div>
     </footer>
   );
 };
 
 export default Footer;
-
