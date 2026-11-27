@@ -25,12 +25,11 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
     if (!loader || !page) return;
 
     const ctx = gsap.context(() => {
-      // Initial loader visibility
       gsap.set(loader, {
         autoAlpha: 1,
       });
 
-      // Keep the complete website above the viewport
+      // Website starts above the viewport
       gsap.set(page, {
         y: -window.innerHeight,
         force3D: true,
@@ -46,7 +45,7 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       });
 
-      // Loader text animation
+      // 1. Loader text falls in
       tl.fromTo(
         wordRefs.current,
         {
@@ -62,7 +61,7 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       );
 
-      // Hold loader
+      // 2. Hold loader
       tl.to(
         {},
         {
@@ -70,11 +69,13 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         },
       );
 
-      // Get individual REJOUICE letters
-      const heroLetters =
-        page.querySelectorAll<HTMLElement>("[data-hero-letter]");
+      // 3. START REJOUICE LETTER ANIMATION
+      // This event fires when the website starts falling
+      tl.call(() => {
+        window.dispatchEvent(new Event("loader-complete"));
+      });
 
-      // COMPLETE WEBSITE FALLS DOWN
+      // 4. Entire website falls down
       tl.to(
         page,
         {
@@ -86,35 +87,15 @@ const Loader: React.FC<LoaderProps> = ({ children, onLoadingComplete }) => {
         "<",
       );
 
-      // REJOUICE LETTERS FALL ONE BY ONE
-      if (heroLetters.length) {
-        tl.fromTo(
-          heroLetters,
-          {
-            yPercent: -120,
-            opacity: 0,
-          },
-          {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.85,
-            stagger: 0.09,
-            ease: "power3.out",
-            clearProps: "transform,opacity",
-          },
-          "<0.1",
-        );
-      }
-
-      // Fade out loader while website comes down
+      // 5. Loader fades out simultaneously
       tl.to(
         loader,
         {
           autoAlpha: 0,
-          duration: 0.5,
+          duration: 0.7,
           ease: "power2.out",
         },
-        "<",
+        "<0.3",
       );
     });
 

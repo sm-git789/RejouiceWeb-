@@ -10,7 +10,7 @@ const bebasNeue = Bebas_Neue({
 
 export const metadata: Metadata = {
   title: "REJOUICE",
-  description: "StudioSize is a free and open source platform for creating and sharing studio logos.",
+  //description: "StudioSize is a free and open source platform for creating and sharing studio logos.",
 };
 
 export default function RootLayout({
@@ -21,8 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={bebasNeue.className}>
-        <LenisScroll /> 
-        {children}</body>
+        <LenisScroll />
+        {children}
+      </body>
     </html>
   );
 }

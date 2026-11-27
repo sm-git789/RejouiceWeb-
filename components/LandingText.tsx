@@ -1,11 +1,97 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 const Page1: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [svgMarkup, setSvgMarkup] = useState("");
+  const [isLoaderComplete, setIsLoaderComplete] = useState(false);
 
-  const headingLetters = ["R", "E", "J", "O", "U", "I", "C", "E"];
+  // Load the SVG as inline markup so GSAP can access individual paths
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadLogo = async () => {
+      try {
+        const response = await fetch("/assets/rejouice-logo.svg", {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load Rejouice SVG");
+        }
+
+        const svg = await response.text();
+        setSvgMarkup(svg);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("SVG loading error:", error);
+        }
+      }
+    };
+
+    loadLogo();
+
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const handleLoaderComplete = () => {
+      setIsLoaderComplete(true);
+    };
+
+    window.addEventListener("loader-complete", handleLoaderComplete);
+
+    return () => {
+      window.removeEventListener("loader-complete", handleLoaderComplete);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!svgMarkup || !sectionRef.current) return;
+
+    const section = sectionRef.current;
+
+    const ctx = gsap.context(() => {
+      const letters = Array.from(
+        section.querySelectorAll<SVGGraphicsElement>(
+          "[data-hero-heading] .letter",
+        ),
+      );
+
+      if (!letters.length) return;
+
+      // Sort letters from left to right
+      const sortedLetters = letters.sort(
+        (a, b) =>
+          a.getBoundingClientRect().left - b.getBoundingClientRect().left,
+      );
+
+      // Keep letters hidden above the heading initially
+      gsap.set(sortedLetters, {
+        y: -150,
+        opacity: 0,
+      });
+
+      // Animate letters when the website starts falling
+      if (isLoaderComplete) {
+        gsap.to(sortedLetters, {
+          y: 0,
+          opacity: 1,
+          duration: 0.85,
+          stagger: {
+            each: 0.09,
+            from: "start",
+          },
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+        });
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [svgMarkup, isLoaderComplete]);
 
   return (
     <section
@@ -22,44 +108,26 @@ const Page1: React.FC = () => {
         text-white
       "
     >
+      {/* REJOUICE SVG LOGO */}
       <div
         className="
-    absolute inset-x-0 top-0
-    flex w-full justify-center
-    overflow-hidden
-    pt-[13vh] sm:pt-[11vh] md:pt-[9vh]
-  "
+          absolute inset-x-0 top-0
+          flex w-full justify-center
+          overflow-hidden
+          pt-[13vh] sm:pt-[11vh] md:pt-[9vh]
+        "
       >
-        <h1
+        <div
           data-hero-heading
           className="
-      w-full
-      mx-auto
-      box-border
-      text-center
-      [font-family:'Rejouice_Headline']
-      text-[22vw]
-      sm:text-[22vw]
-      md:text-[22vw]
-      font-normal
-      leading-[0.85]
-      tracking-[0.005em]
-      whitespace-nowrap
-      select-none
-      origin-center
-      scale-x-100
-    "
-        >
-          {headingLetters.map((letter, index) => (
-            <span
-              key={index}
-              data-hero-letter
-              className="inline-block will-change-transform"
-            >
-              {letter}
-            </span>
-          ))}
-        </h1>
+            w-[96%]
+            [&>svg]:block
+            [&>svg]:w-full
+            [&>svg]:h-auto
+            [&>svg]:overflow-visible
+          "
+          dangerouslySetInnerHTML={{ __html: svgMarkup }}
+        />
       </div>
 
       {/* BOTTOM CONTENT */}
