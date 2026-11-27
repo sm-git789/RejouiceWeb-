@@ -39,6 +39,34 @@ body.reel-open nav {
   pointer-events: none !important;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+@font-face {
+  font-family: "Rejouice Headline";
+  src: url("/fonts/Rejouice Headline/Web Fonts/832c1774ba59866ad72d81ab32734ffd.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rejouice Headline";
+  src: url("/fonts/Rejouice Headline/Web Fonts/832c1774ba59866ad72d81ab32734ffd.woff")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rejouice Headline";
+  src: url("/fonts/Rejouice Headline/Web Fonts/832c1774ba59866ad72d81ab32734ffd.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* url(../public/fonts/Rejouice Headline/Web Fonts/832c1774ba59866ad72d81ab32734ffd.eot)
+
+url(../public/fonts/Rejouice Headline/Web Fonts/832c1774ba59866ad72d81ab32734ffd.ttf) */
 /* 
 .drag-cursor {
   position: fixed;

@@ -18,10 +18,6 @@ const Page2: React.FC = () => {
   const [isReelOpen, setIsReelOpen] = useState(false);
   const [isReelMounted, setIsReelMounted] = useState(false);
 
-  // -----------------------------------
-  // CURSOR VISIBILITY
-  // -----------------------------------
-
   const updateCursorVisibility = () => {
     const cursor = cursorRef.current;
 
@@ -47,10 +43,6 @@ const Page2: React.FC = () => {
       overwrite: "auto",
     });
   };
-
-  // -----------------------------------
-  // GLOBAL MOUSE MOVEMENT
-  // -----------------------------------
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

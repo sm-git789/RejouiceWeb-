@@ -34,7 +34,7 @@ const OurApproach: React.FC = () => {
         {
           scaleX: 0,
           transformOrigin: "left center",
-          duration: 0.8,
+          duration: 0.6,
           stagger: 0.2,
           ease: "power2.inOut",
         },
@@ -46,7 +46,7 @@ const OurApproach: React.FC = () => {
         {
           y: 25,
           opacity: 0,
-          duration: 0.8,
+          duration: 0.6,
           stagger: 0.15,
           ease: "power3.out",
         },

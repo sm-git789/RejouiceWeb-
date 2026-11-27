@@ -108,6 +108,7 @@ const Navbar: React.FC = () => {
       {/* Navbar */}
       <div className="relative z-[60] flex h-[65px] w-full items-center justify-between px-5 md:grid md:grid-cols-3 md:px-8">
         {/* Logo */}
+        {/* Logo */}
         <div className="shrink-0 justify-self-start">
           <a
             href="#home"
@@ -118,7 +119,15 @@ const Navbar: React.FC = () => {
                 The Growth Accelerator
               </span>
             ) : (
-              <span className="text-[24px] font-light tracking-[-0.07em] md:text-[27px]">
+              <span
+                className="
+          [font-family:'Rejouice_Headline']
+          text-[24px]
+          font-normal
+          tracking-[-0.04em]
+          md:text-[27px]
+        "
+              >
                 rejo<u className="no-underline">u</u>ice
               </span>
             )}
