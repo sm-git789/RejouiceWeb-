@@ -33,7 +33,7 @@ const Page1: React.FC = () => {
         <h1
           data-hero-heading
           className="
-      w-[96%]
+      w-full
       mx-auto
       box-border
       text-center
